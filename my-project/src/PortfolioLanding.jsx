@@ -34,16 +34,18 @@ const PortfolioLanding = () => {
     { name: "Postman", icon: <SiPostman className="text-orange-500 text-lg" /> },
     { name: "Hopscotch", icon: <SiHoppscotch className="text-purple-400 text-lg" /> }
   ];
-  
+
+
   const handleDownload = () => {
-    const resumeUrl = './assets/Tejas_Patil_Resume.pdf';
+    const resumeUrl = './assets/Tejas_Patil_9021956896.pdf'; // Path to your resume file
     const link = document.createElement('a');
     link.href = resumeUrl;
-    link.download = 'Tejas_Patil_Resume.pdf'; 
+    link.download = 'Tejas_Patil_Resume.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+  
   
 
   useEffect(() => {
@@ -97,27 +99,30 @@ const PortfolioLanding = () => {
     </a>
 
     {/* Navigation options on the right */}
-    <div className="flex items-center space-x-4 sm:space-x-6 md:space-x-8">  
-      <a href="#about" className="text-white hover:text-purple-400 transition-colors">
-        About
-      </a>
-      <a href="#projects" className="text-gray-600 dark:text-gray-300 hover:text-purple-400 transition-colors">
-        Projects
-      </a>
-      <a href="#contact" className="text-gray-600 dark:text-gray-300 hover:text-purple-400 transition-colors">
-        Contact
-      </a>
-      <button
-        onClick={toggleDarkMode}
-        className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-purple-400 transition-colors"
-      >
-        {isDarkMode ? (
-          <SunIcon className="h-6 w-6 text-yellow-400" />
-        ) : (
-          <MoonIcon className="h-6 w-6 text-purple-400" />
-        )}
-      </button>
-    </div>
+    <div className="flex items-center space-x-4">
+  <div className="hidden md:flex space-x-4">
+    <a href="#about" className="text-white hover:text-purple-400 transition-colors">
+      About
+    </a>
+    <a href="#projects" className="text-gray-600 dark:text-gray-300 hover:text-purple-400 transition-colors">
+      Projects
+    </a>
+    <a href="#contact" className="text-gray-600 dark:text-gray-300 hover:text-purple-400 transition-colors">
+      Contact
+    </a>
+  </div>
+  <button
+    onClick={toggleDarkMode}
+    className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-purple-400 transition-colors"
+  >
+    {isDarkMode ? (
+      <SunIcon className="h-6 w-6 text-yellow-400" />
+    ) : (
+      <MoonIcon className="h-6 w-6 text-purple-400" />
+    )}
+  </button>
+</div>
+
   </div>
 </nav>
 
@@ -223,21 +228,16 @@ const PortfolioLanding = () => {
 
         {/* Download Resume Button */}
         <div className="mt-8 flex justify-center md:justify-start">
-  <button
-    onClick={handleDownload}
-    className="relative inline-flex items-center justify-center px-6 py-3 font-medium text-white transition duration-300 ease-out bg-purple-600 rounded-lg shadow-md overflow-hidden group"
-  >
-    {/* Gradient Background */}
-    <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg opacity-90 transition-all duration-300 group-hover:opacity-100"></span>
+  <a
+  href="../public/Tejas_Patil_9021956896.pdf"
+  download="Tejas_Patil_Resume.pdf"
+  className="relative inline-flex items-center justify-center px-6 py-3 font-medium text-white transition duration-300 ease-out bg-purple-600 rounded-lg shadow-md overflow-hidden group"
+>
+  Download Resume
+</a>
 
-    {/* Bottom Hover Effect */}
-    <span className="absolute bottom-0 left-0 w-full h-1 transition-all duration-300 ease-out bg-pink-500 group-hover:h-full rounded-b-lg"></span>
 
-    {/* Button Text */}
-    <span className="relative z-10 group-hover:text-white">
-      Download Resume
-    </span>
-  </button>
+  
 </div>
 
       </div>
@@ -343,45 +343,22 @@ const PortfolioLanding = () => {
         isDarkMode ? "text-white glow-text" : "text-gray-900"
       }`}>LET'S CONNECT🤝</h2>
       
-      <form className="space-y-6">
-  <input 
-    type="text" 
-    className="w-full p-3 rounded-lg bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-colors" 
-    placeholder="Name"
-  />
-  <input 
-    type="email" 
-    className="w-full p-3 rounded-lg bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-colors" 
-    placeholder="Email" 
-  />
-  <textarea 
-    className="w-full p-3 rounded-lg bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 transition-colors h-32" 
-    placeholder="Message"
-  ></textarea>
-  
-  <button 
-    className="max-w-max px-6 py-3 bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600 text-white dark:text-gray-100 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 font-semibold"
-  >
-    GO 🚀
-  </button>
-</form>
+
 
 
       {/* Social Media Icons */}
       <div className="mt-8 flex justify-center space-x-6">
-        <a href="https://wa.me/your-number" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-green-500 dark:text-gray-400 dark:hover:text-green-400 transition-colors text-2xl">
+        <a href="https://wa.me/9021956896" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-green-500 dark:text-gray-400 dark:hover:text-green-400 transition-colors text-5xl">
           <FaWhatsapp />
         </a>
-        <a href="https://instagram.com/flex_tejas" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-pink-500 dark:text-gray-400 dark:hover:text-pink-400 transition-colors text-2xl">
-          <FaInstagram />
-        </a>
-        <a href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-2xl">
+       
+        <a href="https://linkedin.com/in/tejasp834" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-5xl">
           <FaLinkedin />
         </a>
-        <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors text-2xl">
+        <a href="https://github.com/Tejascodez" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors text-5xl">
           <FaGithub />
         </a>
-        <a href="https://twitter.com/your-handle" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-2xl">
+        <a href="https://twitter.com/tejastp834" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors text-5xl">
           <FaTwitter />
         </a>
       </div>

@@ -24,8 +24,8 @@ export const projects = [
       name: "Cafe Kisoke Machine",
       description: "A idea derived from the machines present in cafes, this machine is designed to make coffee, tea, and hot chocolate.",
       technologies: ["React", "Node.js", "MongoDB", "Docker"],
-      githubLink: "https://github.com/username/freight-management",
-      demoLink: "https://freight-management-demo.vercel.app",
+      githubLink: "https://github.com/Tejascodez/TVV-Cafe.git",
+      demoLink: "https://gilded-gnome-7bfb02.netlify.app/",
       image: cafe,
       features: ["to make orders", " to track orders", " to make payments"]
     },
@@ -44,7 +44,7 @@ export const projects = [
       name: "Disney Clone",
       description: "A  frontend project which i made during learning phase, this project is a clone of disney+ website.",
       technologies: ["React", "Firebase"],
-      githubLink: "https://github.com/username/personal-tracking-system",
+      githubLink: "https://github.com/Tejascodez/disney-clone.git",
       demoLink: "https://adorable-malasada-34094b.netlify.app/",
       image: disneyclone ,
       features: ["Goal tracking", "Visualization tools", "Progress analytics"]
@@ -55,10 +55,10 @@ export const projects = [
       name: "Souled Store Clone",
       description: "A clone of souled store website.This is project is made using react.",
       technologies: ["React"],
-      githubLink: "https://github.com/username/personal-tracking-system",
-      demoLink: "https://adorable-malasada-34094b.netlify.app/",
+      githubLink: "https://github.com/Tejascodez/soul-clone.git",
+      demoLink: "https://resplendent-capybara-9fb345.netlify.app/",
       image: soulclone ,
-      features: ["playing games", "having fun", "memory game"]
+      features: ["soul-store clone", "clone website", "demo website"]
     },
     {
       category: "frontend",
@@ -66,9 +66,9 @@ export const projects = [
       description: "A Gemini Clone using api of Gemini.",
       technologies: ["React", "Gemini API"],
       githubLink: "https://github.com/username/personal-tracking-system",
-      demoLink: "https://adorable-malasada-34094b.netlify.app/",
+      demoLink: "gemini-clone-ten-kappa.vercel.app",
       image: gemini ,
-      features: ["playing games", "having fun", "memory game"]
+      features: ["Gemini clone", "chat-app", "messaging app"]
     },
     {
       category: "frontend",
