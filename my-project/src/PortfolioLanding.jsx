@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
-import { FaWhatsapp, FaInstagram, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
+import { FaWhatsapp, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker } from "react-icons/fa";
 import { SiNextdotjs, SiExpress, SiMongodb, SiMysql, SiTypescript, SiTailwindcss, SiBootstrap, SiPostman, SiHoppscotch } from "react-icons/si";
 import profile from "./assets/profile.png";
@@ -8,6 +8,7 @@ import contact from "./assets/contact.png";
 import { motion } from "framer-motion";
 import logo from "./assets/Tlgo.png";
 import { projects } from "./ProjectData";
+import LanyardSwing from "./components/Landyard";
 
 
 const PortfolioLanding = () => {
@@ -162,11 +163,12 @@ const PortfolioLanding = () => {
 
   {/* Right Side - Profile Image */}
   <div className="w-48 h-48 md:w-70 md:h-70 flex-shrink-0">
-    <img 
+<LanyardSwing />
+    {/* <img 
       src={profile} 
       alt="Tejas Patil" 
       className="w-full h-full object-fit rounded-full shadow-lg border-4 border-gray-300 dark:border-gray-600"
-    />
+    /> */}
   </div>
 </header>
 
