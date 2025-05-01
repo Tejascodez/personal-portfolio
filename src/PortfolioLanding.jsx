@@ -219,12 +219,14 @@ const PortfolioLanding = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-          <button 
-  className={`bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:bg-indigo-600 hover:shadow-indigo-400 hover:text-white ${isDarkMode ? 'shadow-white/10' : 'shadow-black/10'}`}
-  onClick={handleDownload}
+<a
+  href="https://drive.google.com/uc?export=download&id=1X5DfKmvLS1d8q4NiR_0aInjHJO7I8xD9"
+  download="Tejas_Patil_Resume.pdf"
+  className="bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:bg-indigo-600 hover:shadow-indigo-400 hover:text-white"
 >
   Download CV
-</button>
+</a>
+
 
 <a 
   href="mailto:tejastp834@gmail.com"
