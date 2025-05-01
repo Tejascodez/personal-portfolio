@@ -9,7 +9,7 @@ import Projects from "./components/Projects";
 import AboutMe from "./components/AboutMe";
 import ParticleBackground from "./components/ParticlesBackground";
 import CodeAnimation from "./components/CodingAnimation";
-import { jsPDF } from "jspdf";
+
 const PortfolioLanding = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [typedText, setTypedText] = useState('');
@@ -21,20 +21,7 @@ const PortfolioLanding = () => {
     { icon: FaTwitter, url: 'https://twitter.com/tejastp834' },
     { icon: FaWhatsapp, url: 'https://wa.me/9021956896' }
   ];
-  const handleDownload = async () => {
-    try {
-      const response = await fetch('https://drive.google.com/file/d/1X5DfKmvLS1d8q4NiR_0aInjHJO7I8xD9/view?usp=drive_link');
-      const blob = await response.blob();
-      const arrayBuffer = await blob.arrayBuffer();
-  
-      const pdfDoc = new jsPDF();
-      pdfDoc.loadFile(arrayBuffer);
-      pdfDoc.save('Tejas_Patil_Resume.pdf');
-    } catch (error) {
-      console.error('Error downloading the PDF:', error);
-    }
-  };
-  
+
   useEffect(() => {
     // Set initial theme based on user preference
     const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
