@@ -207,7 +207,7 @@ const PortfolioLanding = () => {
               transition={{ delay: 0.6 }}
             >
 <a
-  href="https://drive.google.com/uc?export=download&id=1X5DfKmvLS1d8q4NiR_0aInjHJO7I8xD9"
+  href="https://drive.google.com/file/d/1X5DfKmvLS1d8q4NiR_0aInjHJO7I8xD9/view?usp=drive_link"
   download="Tejas_Patil_Resume.pdf"
   className="bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:bg-indigo-600 hover:shadow-indigo-400 hover:text-white"
 >
