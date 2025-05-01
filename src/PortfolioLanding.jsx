@@ -212,7 +212,7 @@ const PortfolioLanding = () => {
   rel="noopener noreferrer"
   className="bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:bg-indigo-600 hover:shadow-indigo-400 hover:text-white"
 >
-  View CV
+  View Resume
 </a>
 
 
