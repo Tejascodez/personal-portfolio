@@ -1,7 +1,7 @@
 // Projects Section with Frontend, Backend, and Freelance Tabs
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { FaGithub, FaReact, FaExternalLinkAlt, FaCode } from "react-icons/fa";
+import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion";
+import { FaGithub, FaReact, FaExternalLinkAlt, FaCode, FaPlay, FaTimes } from "react-icons/fa";
 import img from '../assets/portfolio.png';
 import img1 from "../assets/souled.png";
 import img2 from '../assets/disney.png';
@@ -23,29 +23,43 @@ const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [hoveredProject, setHoveredProject] = useState(null);
+  const [videoModal, setVideoModal] = useState({ isOpen: false, video: null, title: null });
+  
+  // Update dark mode state when the document class changes
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    };
     
-    // Update dark mode state when the document class changes
-    useEffect(() => {
-      const checkDarkMode = () => {
-        setIsDarkMode(document.documentElement.classList.contains('dark'));
-      };
-      
-      // Initial check
-      checkDarkMode();
-      
-      // Create a MutationObserver to watch for class changes on documentElement
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === 'class') {
-            checkDarkMode();
-          }
-        });
+    // Initial check
+    checkDarkMode();
+    
+    // Create a MutationObserver to watch for class changes on documentElement
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          checkDarkMode();
+        }
       });
-      
-      observer.observe(document.documentElement, { attributes: true });
-      
-      return () => observer.disconnect();
-    }, []);
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => observer.disconnect();
+  }, []);
+
+  // Close modal when escape key is pressed
+  useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === 'Escape' && videoModal.isOpen) {
+        setVideoModal({ isOpen: false, video: null, title: null });
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => window.removeEventListener('keydown', handleEscKey);
+  }, [videoModal.isOpen]);
   
   // Frontend Projects
   const frontendProjects = [
@@ -130,7 +144,7 @@ const Projects = () => {
   // Freelance Projects
   const freelanceProjects = [
     {
-      id: 8,
+      id: 9,
       title: "KING LOGISTICS INFO WEBSITE",
       description: "Custom-built responsive website for a local Logistics services to showcase there services.",
       technologies: ["React", "Next.js", "Tailwind CSS", "Node.js", "MongoDB"],
@@ -142,17 +156,23 @@ const Projects = () => {
     },
   ];
   
-  const [hoveredProject, setHoveredProject] = useState(null);
-  
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
     }
   }, [isInView, controls, activeTab]);
+
+  // Function to open video modal
+  const openVideoModal = (video, title) => {
+    setVideoModal({ isOpen: true, video, title });
+  };
   
   return (
-    <section id="projects" className="py-24 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/10 pointer-events-none"></div>
+    <section id="projects" className={`py-24 relative ${isDarkMode ? 'bg-gray-950' : 'bg-gray-100'}`}>
+      {/* Background gradient */}
+      <div className={`absolute inset-0 ${isDarkMode 
+        ? 'bg-gradient-to-b from-transparent to-gray-900/30' 
+        : 'bg-gradient-to-b from-transparent to-gray-200/50'} pointer-events-none`}></div>
       
       <div className="container mx-auto px-6 max-w-7xl">
         <motion.div
@@ -161,13 +181,18 @@ const Projects = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-       <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-  <span>
-    My Projects✨
-  </span>
-</h2>
-          <div className="w-24 h-1 bg-white mx-auto"></div>
-          <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
+          <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'black'}`}>
+            <span className="relative inline-block">
+              My Projects✨
+              <motion.span 
+                className={`absolute -bottom-2 left-0 w-full h-1 ${isDarkMode ? 'bg-white' : 'bg-gray-800'}`}
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1, delay: 0.5 }}
+              ></motion.span>
+            </span>
+          </h2>
+          <p className={`mt-4 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             Explore my latest projects showcasing my skills in frontend, backend development, and client work.
           </p>
         </motion.div>
@@ -176,34 +201,43 @@ const Projects = () => {
         <div className="flex justify-center mb-12 flex-wrap">
           <button
             onClick={() => setActiveTab("frontend")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 ${
-              activeTab === "frontend"
-                ? "bg-white text-black shadow-lg"
-                : "bg-black text-white border border-gray-800 hover:bg-gray-900"
-            } ${activeTab === "frontend" ? "" : ""} 
-            ${activeTab === "freelance" || activeTab === "backend" ? "rounded-l-none" : "rounded-l-full-none"}`}
+            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
+              ${activeTab === "frontend"
+                ? isDarkMode 
+                  ? "bg-white text-black shadow-lg" 
+                  : "bg-gray-800 text-white shadow-lg"
+                : isDarkMode
+                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
+                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
+              } rounded-l-full`}
           >
             Frontend
           </button>
           <button
             onClick={() => setActiveTab("backend")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 ${
-              activeTab === "backend"
-                ? "bg-white text-black shadow-lg"
-                : "bg-black text-white border border-gray-800 hover:bg-gray-900"
-            } ${activeTab === "backend" ? "" : ""} 
-            ${activeTab === "frontend" || activeTab === "freelance" ? "rounded-none" : ""}`}
+            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
+              ${activeTab === "backend"
+                ? isDarkMode 
+                  ? "bg-white text-black shadow-lg" 
+                  : "bg-gray-800 text-white shadow-lg"
+                : isDarkMode
+                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
+                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
+              } border-l-0 border-r-0`}
           >
             Backend
           </button>
           <button
             onClick={() => setActiveTab("freelance")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 ${
-              activeTab === "freelance"
-                ? "bg-white text-black shadow-lg"
-                : "bg-black text-white border border-gray-800 hover:bg-gray-900"
-            } ${activeTab === "freelance" ? "" : ""} 
-            ${activeTab === "frontend" || activeTab === "backend" ? "rounded-r-full" : "rounded-r-full rounded-l-none"}`}
+            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
+              ${activeTab === "freelance"
+                ? isDarkMode 
+                  ? "bg-white text-black shadow-lg" 
+                  : "bg-gray-800 text-white shadow-lg"
+                : isDarkMode
+                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
+                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
+              } rounded-r-full`}
           >
             Freelance
           </button>
@@ -228,7 +262,10 @@ const Projects = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-white transition-all duration-300 hover:shadow-xl hover:shadow-white/5"
+              className={`group rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl
+                ${isDarkMode 
+                  ? 'bg-gray-900 border-gray-800 hover:border-white hover:shadow-white/5' 
+                  : 'bg-white border-gray-200 hover:border-gray-400 hover:shadow-gray-200'}`}
             >
               <div className="h-56 overflow-hidden relative">
                 <img 
@@ -242,7 +279,8 @@ const Projects = () => {
                       href={project.github} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="bg-white text-black font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center"
+                      className={`font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center
+                        ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
                     >
                       <FaGithub className="mr-2" /> GitHub
                     </a>
@@ -250,7 +288,8 @@ const Projects = () => {
                       href={project.demo} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="bg-black text-white border border-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center"
+                      className={`font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center
+                        ${isDarkMode ? 'bg-black text-white border border-white' : 'bg-white black border border-gray-800'}`}
                     >
                       <FaReact className="mr-2" /> Demo
                     </a>
@@ -258,11 +297,12 @@ const Projects = () => {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300 transition-colors duration-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">
+                <h3 className={`text-xl font-bold mb-2 group-hover:text-gray-500 transition-colors duration-300
+                  ${isDarkMode ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' : 'black'}`}>
                   {project.title}
                 </h3>
 
-                <p className="text-gray-400 mb-4 line-clamp-3">
+                <p className={`mb-4 line-clamp-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {project.description}
                 </p>
 
@@ -270,7 +310,10 @@ const Projects = () => {
                   {project.technologies.map((tech, i) => (
                     <span 
                       key={i} 
-                      className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-sm border border-gray-700"
+                      className={`px-3 py-1 rounded-full text-sm 
+                        ${isDarkMode 
+                          ? 'bg-gray-800 text-gray-300 border black' 
+                          : 'bg-gray-200 text-gray-700 border border-gray-300'}`}
                     >
                       {tech}
                     </span>
@@ -287,56 +330,61 @@ const Projects = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-white transition-all duration-300 hover:shadow-xl hover:shadow-white/5"
+              className={`group rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl
+                ${isDarkMode 
+                  ? 'bg-gray-900 border-gray-800 hover:border-white hover:shadow-white/5' 
+                  : 'bg-white border-gray-200 hover:border-gray-400 hover:shadow-gray-200'}`}
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
             >
               <div className="h-56 overflow-hidden relative">
-                {hoveredProject === project.id ? (
-                  <div className="w-full h-full relative">
-                    <video 
-                      key={`video-${project.id}`}
-                      src={project.demoVideo} 
-                      autoPlay 
-                      muted 
-                      loop 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
-                    <div className="absolute bottom-2 left-2 bg-white text-black text-xs px-2 py-1 rounded-md">
-                      Demo Preview
-                    </div>
-                  </div>
-                ) : (
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                
+                {/* Video preview overlay */}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <button
+                    onClick={() => openVideoModal(project.demoVideo, project.title)}
+                    className={`px-4 py-2 rounded-lg flex items-center font-medium transition-transform duration-300 hover:scale-110
+                      ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
+                  >
+                    <FaPlay className="mr-2" /> Watch Demo
+                  </button>
+                </div>
+                
+                <div className="absolute bottom-4 right-4 z-10">
                   <a 
                     href={project.github} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="bg-white text-black font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center"
+                    className={`font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center opacity-0 group-hover:opacity-100
+                      ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
                   >
                     <FaGithub className="mr-2" /> GitHub
                   </a>
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300 transition-colors duration-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">
+                <h3 className={`text-xl font-bold mb-2 transition-colors duration-300
+                  ${isDarkMode 
+                    ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' 
+                    : 'black group-hover:text-gray-600'}`}>
                   {project.title}
                 </h3>
-                <p className="text-gray-400 mb-4 line-clamp-3">
+                <p className={`mb-4 line-clamp-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {project.technologies.map((tech, i) => (
                     <span 
                       key={i} 
-                      className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-sm border border-gray-700"
+                      className={`px-3 py-1 rounded-full text-sm 
+                        ${isDarkMode 
+                          ? 'bg-gray-800 text-gray-300 border black' 
+                          : 'bg-gray-200 text-gray-700 border border-gray-300'}`}
                     >
                       {tech}
                     </span>
@@ -353,10 +401,14 @@ const Projects = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-white transition-all duration-300 hover:shadow-xl hover:shadow-white/5"
+              className={`group rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl
+                ${isDarkMode 
+                  ? 'bg-gray-900 border-gray-800 hover:border-white hover:shadow-white/5' 
+                  : 'bg-white border-gray-200 hover:border-gray-400 hover:shadow-gray-200'}`}
             >
               <div className="relative">
-                <div className="absolute top-2 right-2 z-10 bg-white text-black text-xs px-3 py-1 rounded-full font-medium">
+                <div className={`absolute top-2 right-2 z-10 text-xs px-3 py-1 rounded-full font-medium
+                  ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}>
                   Client Project
                 </div>
                 <div className="h-56 overflow-hidden relative">
@@ -370,7 +422,8 @@ const Projects = () => {
                       href={project.liveLink} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="bg-white text-black font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center"
+                      className={`font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center
+                        ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
                     >
                       <FaExternalLinkAlt className="mr-2" /> Live Site
                     </a>
@@ -379,21 +432,33 @@ const Projects = () => {
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300 transition-colors duration-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">
+                  <h3 className={`text-xl font-bold transition-colors duration-300
+                    ${isDarkMode 
+                      ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' 
+                      : 'black group-hover:text-gray-600'}`}>
                     {project.title}
                   </h3>
-                  <span className="text-gray-400 text-sm">{project.completedDate}</span>
+                  <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                    {project.completedDate}
+                  </span>
                 </div>
-                <p className="text-gray-400 mb-3 line-clamp-2">
+                <p className={`mb-3 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {project.description}
                 </p>
                 
                 <div className="mb-4">
-                  <div className="text-white font-medium text-sm mb-1">Client:</div>
-                  <div className="text-gray-400">{project.client}</div>
+                  <div className={`font-medium text-sm mb-1 ${isDarkMode ? 'text-white' : 'black'}`}>
+                    Client:
+                  </div>
+                  <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                    {project.client}
+                  </div>
                 </div>
                 
-                <div className="mb-4 bg-gray-800 border border-gray-700 rounded-lg p-3 italic text-gray-300 text-sm">
+                <div className={`mb-4 border rounded-lg p-3 italic text-sm
+                  ${isDarkMode 
+                    ? 'bg-gray-800 black text-gray-300' 
+                    : 'bg-gray-100 border-gray-200 text-gray-700'}`}>
                   "{project.testimonial}"
                 </div>
                 
@@ -401,7 +466,10 @@ const Projects = () => {
                   {project.technologies.map((tech, i) => (
                     <span 
                       key={i} 
-                      className="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-sm border border-gray-700"
+                      className={`px-3 py-1 rounded-full text-sm 
+                        ${isDarkMode 
+                          ? 'bg-gray-800 text-gray-300 border black' 
+                          : 'bg-gray-200 text-gray-700 border border-gray-300'}`}
                     >
                       {tech}
                     </span>
@@ -412,6 +480,60 @@ const Projects = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {videoModal.isOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80"
+            onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25 }}
+              className={`relative max-w-4xl w-full rounded-xl overflow-hidden shadow-2xl ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={`p-4 flex justify-between items-center border-b ${isDarkMode ? 'black' : 'border-gray-200'}`}>
+                <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'black'}`}>
+                  {videoModal.title} - Demo Preview
+                </h3>
+                <button 
+                  onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
+                  className={`p-2 rounded-full hover:bg-opacity-10 transition-colors
+                    ${isDarkMode ? 'hover:bg-white text-white' : 'hover:bg-gray-800 black'}`}
+                >
+                  <FaTimes size={20} />
+                </button>
+              </div>
+              <div className="relative pt-[56.25%]"> {/* 16:9 aspect ratio */}
+                <video 
+                  src={videoModal.video} 
+                  className="absolute top-0 left-0 w-full h-full object-contain bg-black"
+                  controls
+                  autoPlay
+                />
+              </div>
+              <div className={`p-4 flex justify-end ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+                <button 
+                  onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
+                  className={`px-4 py-2 rounded-lg font-medium
+                    ${isDarkMode 
+                      ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                      : 'bg-gray-200 black hover:bg-gray-300'}`}
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
