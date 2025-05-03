@@ -168,7 +168,7 @@ const Projects = () => {
   };
   
   return (
-    <section id="projects" className={`py-24 relative ${isDarkMode ? 'bg-gray-950' : 'bg-gray-100'}`}>
+    <section id="projects" className={`py-24 relative ${isDarkMode ? 'bg-gray-950' : 'bg-white'}`}>
       {/* Background gradient */}
       <div className={`absolute inset-0 ${isDarkMode 
         ? 'bg-gradient-to-b from-transparent to-gray-900/30' 
@@ -178,18 +178,24 @@ const Projects = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
           <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'black'}`}>
             <span className="relative inline-block">
               My Projects✨
-              <motion.span 
-                className={`absolute -bottom-2 left-0 w-full h-1 ${isDarkMode ? 'bg-white' : 'bg-gray-800'}`}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1, delay: 0.5 }}
-              ></motion.span>
+              <motion.span
+  className="block w-24 h-1 mx-auto mt-4  rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+  animate={{
+    backgroundPosition: ['0% 50%', '100% 50%'],
+  }}
+  transition={{
+    duration: 3,
+    repeat: Infinity,
+    repeatType: 'reverse',
+    ease: 'linear',
+  }}
+/>
             </span>
           </h2>
           <p className={`mt-4 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -252,7 +258,7 @@ const Projects = () => {
             visible: { opacity: 1, y: 0 },
             hidden: { opacity: 0, y: 50 }
           }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {/* Frontend Projects */}
@@ -298,7 +304,7 @@ const Projects = () => {
               </div>
               <div className="p-6">
                 <h3 className={`text-xl font-bold mb-2 group-hover:text-gray-500 transition-colors duration-300
-                  ${isDarkMode ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' : 'black'}`}>
+                  ${isDarkMode ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]' : 'black'}`}>
                   {project.title}
                 </h3>
 
@@ -370,7 +376,7 @@ const Projects = () => {
               <div className="p-6">
                 <h3 className={`text-xl font-bold mb-2 transition-colors duration-300
                   ${isDarkMode 
-                    ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' 
+                    ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]' 
                     : 'black group-hover:text-gray-600'}`}>
                   {project.title}
                 </h3>
@@ -434,7 +440,7 @@ const Projects = () => {
                 <div className="flex justify-between items-center mb-2">
                   <h3 className={`text-xl font-bold transition-colors duration-300
                     ${isDarkMode 
-                      ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' 
+                      ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]' 
                       : 'black group-hover:text-gray-600'}`}>
                     {project.title}
                   </h3>

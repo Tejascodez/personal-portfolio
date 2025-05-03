@@ -328,7 +328,7 @@ const AboutMe = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'} tracking-tight`}>
@@ -342,7 +342,7 @@ const AboutMe = () => {
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
             className="w-full sm:w-3/4 md:w-3/5 lg:w-2/5 mx-auto lg:mx-0"
           >
             <div className="relative w-full aspect-[4/5] sm:aspect-auto sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl shadow-black/10 dark:shadow-blue-900/10 border border-gray-200 dark:border-gray-800 group perspective">
@@ -396,7 +396,7 @@ const AboutMe = () => {
               visible: { opacity: 1, x: 0 },
               hidden: { opacity: 0, x: 50 }
             }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
             className="lg:w-3/5 mt-12 lg:mt-0"
           >
             <div className="relative">
@@ -431,7 +431,7 @@ const AboutMe = () => {
                         key={index}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
+                        transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
                         className={`flex items-center ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
                       >
                         <span className="inline-block w-2 h-2 rounded-full bg-blue-500 mr-3"></span>
@@ -461,7 +461,7 @@ text-shadow: yellow-500;">I'm a fitness freak</span>, watching anime, and of cou
               visible: { opacity: 1, y: 0 },
               hidden: { opacity: 0, y: 50 }
             }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
             className="w-full lg:w-2/5"
           >
             <div className="backdrop-blur-lg rounded-3xl border border-gray-200 dark:border-gray-800 p-8 shadow-xl hover:shadow-2xl transition-all duration-500">
@@ -531,7 +531,7 @@ text-shadow: yellow-500;">I'm a fitness freak</span>, watching anime, and of cou
               visible: { opacity: 1, y: 0 },
               hidden: { opacity: 0, y: 50 }
             }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
             className="w-full lg:w-3/5"
           >
             <div className="backdrop-blur-lg rounded-3xl border border-gray-200 dark:border-gray-800 p-8 shadow-xl hover:shadow-2xl transition-all duration-500">

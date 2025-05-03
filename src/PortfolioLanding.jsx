@@ -279,6 +279,7 @@ const PortfolioLanding = () => {
         </header>
 
         <AboutMe />
+        
         <Projects />
       </motion.div>
     </div>
