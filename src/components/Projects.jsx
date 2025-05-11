@@ -14,6 +14,7 @@ import demopic3 from "../assets/demopic3.png";
 import demopic1 from "../assets/demopic1.png";
 import demopic2 from "../assets/demopic2.png";
 import freelance from "../assets/freelance1.png";
+import cda from  "../assets/codementorai.png";
 import imgtrex from '../assets/Imgtrex.png';
 import imgtrexDemo from '../assets/ImgtrexDemo.mp4';
 
@@ -64,6 +65,15 @@ const Projects = () => {
   // Frontend Projects
   const frontendProjects = [
     {
+      id: 4,
+      title: "CodeMentor AI",
+      description: "CodeMentor AI is a platform where user can improve their problem solving skills with the help of AI",
+      technologies: ["Node.js", "Express", "MongoDB","Clerk Auth", "JudgeO api", "Gemini API"],
+      image: cda,
+      github: "https://github.com/Dcode36/code_mentor_ai",
+      demo: "https://code-mentor-ai.vercel.app/",
+    },
+    {
       id: 1,
       title: "Modern E-commerce Platform",
       description: "A fully responsive e-commerce website with dynamic product filtering, cart functionality, and user authentication.",
@@ -89,13 +99,16 @@ const Projects = () => {
       image: img,
       github: "https://github.com/Tejascodez/porfoilio.git",
       demo: "https://tejas-portofolio.netlify.app/"
-    }
+    },
+ ,
   ];
   
   // Backend Projects
   const backendProjects = [
+
+
     {
-      id: 4,
+      id: 5,
       title: "Imgtrex AI Image Generator",
       description: "Imgtrex generates the images based on the prompt with user freindly ui.",
       technologies: ["Node.js", "Express", "MongoDB", "JWT", "HuggingFace API"],
@@ -104,7 +117,7 @@ const Projects = () => {
       demoVideo: imgtrexDemo,
     },
     {
-      id: 5,
+      id: 6,
       title: "TBlog Spot",
       description: "RESTful API for a blog platform with user authentication, post management, and comment functionality.",
       technologies: ["Node.js", "Express", "MongoDB", "JWT"],
@@ -231,7 +244,7 @@ const Projects = () => {
                   : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
               } border-l-0 border-r-0`}
           >
-            Backend
+            Full Stack 
           </button>
           <button
             onClick={() => setActiveTab("freelance")}
