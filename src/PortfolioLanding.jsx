@@ -13,7 +13,7 @@ import CodeAnimation from "./components/CodingAnimation";
 const PortfolioLanding = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [typedText, setTypedText] = useState('');
-  const introText = "Full-Stack Developer & A problem Solver";
+  const introText = "Full-Stack Developer";
 
   const socialLinks = [
     { icon: FaGithub, url: 'https://github.com/Tejascodez' },
@@ -179,15 +179,7 @@ const PortfolioLanding = () => {
               </p>
             </motion.div>
 
-            <motion.p 
-              className={`text-lg ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} max-w-xl`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              Crafting immersive digital experiences with cutting-edge innovation.
-              Transforming complex challenges into elegant solutions.
-            </motion.p>
+            
 
             {/* Tech stack with colorful headings */}
             <motion.div
@@ -207,7 +199,7 @@ const PortfolioLanding = () => {
               transition={{ delay: 0.6 }}
             >
 <a
-  href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=drive_link"
+  href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=sharing"
   target="_blank"
   rel="noopener noreferrer"
   className="bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:bg-indigo-600 hover:shadow-indigo-400 hover:text-white"

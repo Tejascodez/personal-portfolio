@@ -113,7 +113,7 @@ const Projects = () => {
       description: "Imgtrex generates the images based on the prompt with user freindly ui.",
       technologies: ["Node.js", "Express", "MongoDB", "JWT", "HuggingFace API"],
       image: imgtrex,
-      github: "https://github.com/Tejascodez/tblog-spot.git",
+      github: "https://github.com/Tejascodez/Imgtrex.git",
       demoVideo: imgtrexDemo,
     },
     {
@@ -160,11 +160,11 @@ const Projects = () => {
       id: 9,
       title: "KING LOGISTICS INFO WEBSITE",
       description: "Custom-built responsive website for a local Logistics services to showcase there services.",
-      technologies: ["React", "Next.js", "Tailwind CSS", "Node.js", "MongoDB"],
+      technologies: ["React", "CSS", "Node.js"],
       image: freelance,
       liveLink: "https://heroic-longma-efd468.netlify.app/",
       completedDate: "March 2025",
-      client: "Fine Dining LLC",
+      client: "King Logistics & Solutions",
       testimonial: "Tejas delivered a stunning website that exceeded our expectations. The reservation system has increased our bookings by 40%."
     },
   ];
