@@ -17,6 +17,7 @@ import freelance from "../assets/freelance1.png";
 import cda from  "../assets/codementorai.png";
 import imgtrex from '../assets/Imgtrex.png';
 import imgtrexDemo from '../assets/ImgtrexDemo.mp4';
+import dempic8 from '../assets/demo8.png';
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState("frontend");
@@ -107,6 +108,15 @@ const Projects = () => {
   const backendProjects = [
 
 
+       {
+      id: 9,
+      title: "AI MCQ Generator",
+      description: "A library of reusable UI components built with React, Tailwind CSS, and Framer Motion.",
+      technologies: ["typscript", "LLama", "AI", "Taintwind CSS", "Node.js", "Express", "whisper API"],
+      image: dempic8,
+      github: "https://github.com/Tejascodez/video-mcq-ai.git",
+
+    },
     {
       id: 5,
       title: "Imgtrex AI Image Generator",
