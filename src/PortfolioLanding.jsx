@@ -9,7 +9,7 @@ import Projects from "./components/Projects";
 import AboutMe from "./components/AboutMe";
 import ParticleBackground from "./components/ParticlesBackground";
 import CodeAnimation from "./components/CodingAnimation";
-
+import profile from "./assets/profile.jpg"; // Replace with your actual profile image path
 const PortfolioLanding = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [typedText, setTypedText] = useState('');
@@ -84,58 +84,63 @@ const PortfolioLanding = () => {
 
       >
         {/* Enhanced Navbar */}
-        <nav
-  className={`w-full sticky top-0 z-50 backdrop-blur-sm border-b ${
-    isDarkMode ? 'bg-black/90 border-gray-800' : 'bg-white/90 border-gray-200'
-  }`}
->
+<nav className={`w-full sticky top-0 z-50 backdrop-blur-sm border-b ${
+  isDarkMode ? 'bg-black/90 border-gray-800' : 'bg-white/90 border-gray-200'
+}`}>
   <div className="max-w-7xl mx-auto flex justify-between items-center p-6">
-    <a href="/">
-      <h1 className="text-2xl font-bold flex items-center">
+    {/* Left Section: Profile Image and Logo */}
+    <div className="flex items-center space-x-4">
+      {/* Profile Image */}
+      <img
+        src={profile} // Replace with the actual path to the user's profile image
+        alt="User Profile"
+        className="w-18 h-18 rounded-full border-2 border-gray-300 dark:border-gray-600"
+      />
+
+      {/* Logo and Brand Name */}
+      <a href="/" className="flex items-center space-x-2">
         <img
           src={logo}
           alt="Logo"
-          className="w-8 h-8 sm:w-10 sm:h-10 mr-2"
+          className="w-8 h-8 sm:w-10 sm:h-10"
         />
-        <span className={isDarkMode ? 'text-white' : 'text-black'}>
+        <span className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
           EJAS
         </span>
-      </h1>
-    </a>
+      </a>
+    </div>
 
+    {/* Right Section: Navigation Links and Dark Mode Toggle */}
     <div className="flex items-center space-x-4">
+      {/* Navigation Links */}
       <div className="hidden md:flex space-x-6">
         <a
           href="#about"
-          className={`${
-            isDarkMode
-              ? 'text-gray-300 hover:text-white'
-              : 'text-gray-700 hover:text-black'
-          } transition-all duration-300 font-medium`}
+          className={`transition-all duration-300 font-medium ${
+            isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'
+          }`}
         >
           About
         </a>
         <a
           href="#projects"
-          className={`${
-            isDarkMode
-              ? 'text-gray-300 hover:text-white'
-              : 'text-gray-700 hover:text-black'
-          } transition-all duration-300 font-medium`}
+          className={`transition-all duration-300 font-medium ${
+            isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'
+          }`}
         >
           Projects
         </a>
         <a
           href="/"
-          className={`${
-            isDarkMode
-              ? 'text-gray-300 hover:text-white'
-              : 'text-gray-700 hover:text-black'
-          } transition-all duration-300 font-medium`}
+          className={`transition-all duration-300 font-medium ${
+            isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'
+          }`}
         >
           Contact
         </a>
       </div>
+
+      {/* Dark Mode Toggle Button */}
       <button
         onClick={toggleDarkMode}
         className={`p-2 rounded-full transition-all duration-300 border ${
@@ -153,6 +158,7 @@ const PortfolioLanding = () => {
     </div>
   </div>
 </nav>
+
 
         <ParticleBackground />
 
