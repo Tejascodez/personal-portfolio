@@ -1,33 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion";
-import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker, FaCode, FaStar, FaExternalLinkAlt, FaCertificate } from "react-icons/fa";
-import { SiNextdotjs, SiExpress, SiMongodb, SiMysql, SiTypescript, SiTailwindcss, SiBootstrap, SiPostman, SiHoppscotch, SiLeetcode, SiHackerrank, SiUdemy, SiLogitech, SiTechcrunch } from "react-icons/si";
+import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker, FaCode, FaExternalLinkAlt } from "react-icons/fa";
+import { SiNextdotjs, SiExpress, SiMongodb, SiMysql, SiTypescript, SiTailwindcss, SiBootstrap, SiPostman, SiHoppscotch, SiLeetcode, SiHackerrank, SiUdemy, SiLogitech, SiTechcrunch, SiGraphql, SiPostgresql } from "react-icons/si";
 import profile from '../assets/profile.png';
 
-// Enhanced About Me Section with Photo Gallery, DSA Platforms, and Animated Skills
 const AboutMe = () => {
   const [activePhoto, setActivePhoto] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
   const skillsControls = useAnimation();
-  const dsaControls = useAnimation();
   const bioControls = useAnimation();
   const skillsRef = useRef(null);
-  const dsaRef = useRef(null);
   const bioRef = useRef(null);
   const isSkillsInView = useInView(skillsRef, { once: false, amount: 0.2 });
-  const isDsaInView = useInView(dsaRef, { once: false, amount: 0.2 });
   const isBioInView = useInView(bioRef, { once: false, amount: 0.3 });
   
-  // Update dark mode state when the document class changes
+  // Update dark mode state
   useEffect(() => {
     const checkDarkMode = () => {
       setIsDarkMode(document.documentElement.classList.contains('dark'));
     };
     
-    // Initial check
     checkDarkMode();
     
-    // Create a MutationObserver to watch for class changes on documentElement
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'class') {
@@ -37,17 +32,15 @@ const AboutMe = () => {
     });
     
     observer.observe(document.documentElement, { attributes: true });
-    
     return () => observer.disconnect();
   }, []);
   
-  // Sample photos - replace with your actual photo imports
+  // Sample photos
   const photos = [
     { src: profile, alt: "Working on a project" },
-    // Add more photos when available
   ];
   
-  // Tech colors mapping with enhanced color palette
+  // Tech colors mapping
   const techColors = {
     react: "text-blue-500",
     next: "text-black dark:text-white",
@@ -55,6 +48,8 @@ const AboutMe = () => {
     express: "text-gray-500", 
     mongodb: "text-green-600",
     mysql: "text-blue-600",
+    postgresql: "text-blue-700",
+    graphql: "text-pink-500",
     typescript: "text-blue-700",
     javascript: "text-yellow-500",
     tailwind: "text-teal-500",
@@ -65,110 +60,105 @@ const AboutMe = () => {
     postman: "text-orange-500",
     leetcode: "text-orange-400",
     hackerrank: "text-green-500",
-    freecodecamp: "text-blue-400",
-    coursera: "text-blue-600",
     udemy: "text-purple-500"
   };
   
-  // DSA platform profiles with enhanced details
+  // DSA platform profiles - converted to button format
   const dsaPlatforms = [
     { 
       name: "LeetCode", 
-      icon: <SiLeetcode className={`text-2xl ${techColors.leetcode}`} />,
+      icon: <SiLeetcode className={`text-sm ${techColors.leetcode}`} />,
       username: "tejas_patil",
-      stats: "Beginner (Currently learning)",
-      description: "Building problem-solving skills with algorithmic challenges",
+      stats: "Beginner",
       url: "https://leetcode.com/tejastp834",
     },
     { 
       name: "HackerRank", 
-      icon: <SiHackerrank className={`text-2xl ${techColors.hackerrank}`} />,
+      icon: <SiHackerrank className={`text-sm ${techColors.hackerrank}`} />,
       username: "tejas_patil",
-      stats: "5-star in JAVA",
-      description: "Competitive coding and algorithm challenges",
-      ranking: "Gold Badge in Problem Solving",
+      stats: "5-star Java",
       url: "https://hackerrank.com/tejastp834",
     },
   ];
-  
-  // Skill categories
-  const [selectedCategory, setSelectedCategory] = useState("frontend");
   
   // Function to get platform icon
   const getPlatformIcon = (platform) => {
     switch(platform.toLowerCase()) {
       case 'hackerrank':
-        return <SiHackerrank className={`text-2xl ${techColors.hackerrank}`} />;
-      case 'IGapTech':
-        return <SiLogitech className={`text-2xl ${techColors.react}`} />;
+        return <SiHackerrank className={`text-lg ${techColors.hackerrank}`} />;
+      case 'igaptech':
+        return <SiLogitech className={`text-lg ${techColors.react}`} />;
       case 'udemy':
-        return <SiUdemy className={`text-2xl ${techColors.udemy}`} />;
+        return <SiUdemy className={`text-lg ${techColors.udemy}`} />;
       default:
-        return <SiTechcrunch className={`text-2xl ${techColors.next}`} />;
+        return <SiTechcrunch className={`text-lg ${techColors.next}`} />;
     }
   };
   
-  // Skill sets organized by category with proficiency levels
-  const skillCategories = {
-    frontend: [
-      { name: "React.js", icon: <FaReact className={techColors.react} />, level: 90 },
-      { name: "Next.js", icon: <SiNextdotjs className={techColors.next} />, level: 85 },
-      { name: "JavaScript", icon: <FaJs className={techColors.javascript} />, level: 95 },
-      { name: "TypeScript", icon: <SiTypescript className={techColors.typescript} />, level: 80 },
-      { name: "Tailwind CSS", icon: <SiTailwindcss className={techColors.tailwind} />, level: 90 },
-      { name: "Bootstrap", icon: <SiBootstrap className={techColors.bootstrap} />, level: 85 },
-    ],
-    backend: [
-      { name: "Node.js", icon: <FaNodeJs className={techColors.node} />, level: 88 },
-      { name: "Express.js", icon: <SiExpress className={techColors.express} />, level: 85 },
-      { name: "MongoDB", icon: <SiMongodb className={techColors.mongodb} />, level: 80 },
-      { name: "MySQL", icon: <SiMysql className={techColors.mysql} />, level: 75 },
-      { name: "Java", icon: <FaJava className={techColors.java} />, level: 70 },
-    ],
-    tools: [
-      { name: "Git & GitHub", icon: <FaGitAlt className={techColors.git} />, level: 92 },
-      { name: "Docker", icon: <FaDocker className={techColors.docker} />, level: 78 },
-      { name: "Postman", icon: <SiPostman className={techColors.postman} />, level: 88 },
-      { name: "Hopscotch", icon: <SiHoppscotch className="text-gray-800 dark:text-white text-lg" />, level: 70 },
-    ],
-    certifications: [
-      {
-        title: "SQL Intermediate",
-        platform: "Hackerrank",
-        link: "https://www.hackerrank.com/certificates/iframe/bf3043c10f14",
-        date: "April 2025",
-        skills: ["SQL"]
-      },
-      {
-        title: "Core Java",
-        platform: "Udemy",
-        link: "https://drive.google.com/file/d/1c8KlW8pq-9jA-vXryIRDxBIBElvwHAYe/view?usp=drive_link",
-        date: "May 2025",
-        skills: ["JAVA", "OOPS", "Data Structures"]
-      },
-      {
-        title: "Web Developer Intern",
-        platform: "Intrainz",
-        link: "https://drive.google.com/file/d/184OLR3u1OuHkuyAf9a-r6PZf4q1kA0Ev/view?usp=drive_link",
-        date: "July 2024 - Aug 2024",
-        skills: ["Frontend Development"]
-      },
-      {
-        title: "Web Development with React",
-        platform: "IGapTech",
-        link: "https://drive.google.com/file/d/1UX4kobUquXDh1NlfXFjJdl39oxBZ68Q4/view?usp=drive_link",
-        date: "Dec 2023 - Jan 2024",
-        skills: ["HTML", "CSS","Javascript", "Mock API", "React"]
-      },
-      {
-        title: "30-40WPM Certified Typer",
-        platform: "MSCE, Pune",
-        link: "https://drive.google.com/file/d/1wwyA3_Y27XjY9Y35-o7iIHM4ns00QTTU/view?usp=drive_link",
-        date: "May 2020",
-        skills: ["Typing", "MS Word", "MS Excel"]
-      }
-    ],
-  };
+  // All skills combined into one array
+  const allSkills = [
+    // Frontend
+    { name: "React.js", icon: <FaReact className={techColors.react} /> },
+    { name: "Next.js", icon: <SiNextdotjs className={techColors.next} /> },
+    { name: "JavaScript", icon: <FaJs className={techColors.javascript} /> },
+    { name: "TypeScript", icon: <SiTypescript className={techColors.typescript} /> },
+    { name: "Tailwind CSS", icon: <SiTailwindcss className={techColors.tailwind} /> },
+    { name: "Bootstrap", icon: <SiBootstrap className={techColors.bootstrap} /> },
+    // Backend
+    { name: "Node.js", icon: <FaNodeJs className={techColors.node} /> },
+    { name: "Express.js", icon: <SiExpress className={techColors.express} /> },
+    { name: "GraphQL", icon: <SiGraphql className={techColors.graphql} /> },
+    { name: "MongoDB", icon: <SiMongodb className={techColors.mongodb} /> },
+    { name: "PostgreSQL", icon: <SiPostgresql className={techColors.postgresql} /> },
+    { name: "MySQL", icon: <SiMysql className={techColors.mysql} /> },
+    { name: "Java", icon: <FaJava className={techColors.java} /> },
+    // Tools
+    { name: "Git & GitHub", icon: <FaGitAlt className={techColors.git} /> },
+    { name: "Docker", icon: <FaDocker className={techColors.docker} /> },
+    { name: "Postman", icon: <SiPostman className={techColors.postman} /> },
+    { name: "Hopscotch", icon: <SiHoppscotch className="text-gray-800 dark:text-white" /> },
+  ];
+  
+  // Certifications (commented out for now)
+  /*
+  const certifications = [
+    {
+      title: "SQL Intermediate",
+      platform: "Hackerrank",
+      link: "https://www.hackerrank.com/certificates/iframe/bf3043c10f14",
+      date: "April 2025",
+      skills: ["SQL"]
+    },
+    {
+      title: "Core Java",
+      platform: "Udemy",
+      link: "https://drive.google.com/file/d/1c8KlW8pq-9jA-vXryIRDxBIBElvwHAYe/view?usp=drive_link",
+      date: "May 2025",
+      skills: ["JAVA", "OOPS", "Data Structures"]
+    },
+    {
+      title: "Web Developer Intern",
+      platform: "Intrainz",
+      link: "https://drive.google.com/file/d/184OLR3u1OuHkuyAf9a-r6PZf4q1kA0Ev/view?usp=drive_link",
+      date: "July 2024 - Aug 2024",
+      skills: ["Frontend Development"]
+    },
+    {
+      title: "Web Development with React",
+      platform: "IGapTech",
+      link: "https://drive.google.com/file/d/1UX4kobUquXDh1NlfXFjJdl39oxBZ68Q4/view?usp=drive_link",
+      date: "Dec 2023 - Jan 2024",
+      skills: ["HTML", "CSS","Javascript", "Mock API", "React"]
+    },
+    {
+      title: "30-40WPM Certified Typer",
+      platform: "MSCE, Pune",
+      link: "https://drive.google.com/file/d/1wwyA3_Y27XjY9Y35-o7iIHM4ns00QTTU/view?usp=drive_link",
+      date: "May 2020",
+      skills: ["Typing", "MS Word", "MS Excel"]
+    }
+  ];
+  */
   
   // Bio highlights
   const bioHighlights = [
@@ -193,131 +183,11 @@ const AboutMe = () => {
     if (isSkillsInView) {
       skillsControls.start("visible");
     }
-    if (isDsaInView) {
-      dsaControls.start("visible");
-    }
     if (isBioInView) {
       bioControls.start("visible");
     }
-  }, [isSkillsInView, isDsaInView, isBioInView, skillsControls, dsaControls, bioControls, selectedCategory]);
-  
-  // Render certification items
-  const renderCertificationItems = () => {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {skillCategories.certifications.map((cert, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group"
-          >
-            <a
-              href={cert.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block h-full p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg group-hover:shadow-blue-500/10"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <div className="p-2 mr-3 rounded-lg bg-blue-50 dark:bg-blue-900/30">
-                    {getPlatformIcon(cert.platform)}
-                  </div>
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
-                    {cert.platform}
-                  </span>
-                </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {cert.date}
-                </span>
-              </div>
-              
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 mb-3">
-                {cert.title}
-              </h4>
-              
-              <div className="flex flex-wrap gap-2 mt-4">
-                {cert.skills.map((skill, idx) => (
-                  <span 
-                    key={idx} 
-                    className="px-2 py-1 text-xs font-medium rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-              
-              <div className="mt-4 flex justify-end">
-                <span className="text-sm text-blue-600 dark:text-blue-400 flex items-center group-hover:underline">
-                  View Certificate 
-                  <FaExternalLinkAlt className="ml-1 text-xs" />
-                </span>
-              </div>
-            </a>
-          </motion.div>
-        ))}
-      </div>
-    );
-  };
-  
-  // Render regular skill items
-  const renderSkillItems = (category) => {
-    return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-        {skillCategories[category].map((skill, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="flex flex-col p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg group"
-          >
-            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">
-              {skill.icon}
-            </div>
-            <p className="text-base font-medium text-gray-800 dark:text-gray-200 group-hover:text-black dark:group-hover:text-white transition-colors duration-300">
-              {skill.name}
-            </p>
-            
-            {/* Skill proficiency bar */}
-            <div className="mt-3 w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600"
-                initial={{ width: 0 }}
-                animate={{ width: `${skill.level}%` }}
-                transition={{ duration: 1, delay: 0.2 + index * 0.1 }}
-              ></motion.div>
-            </div>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 text-right">
-              {skill.level}%
-            </p>
-          </motion.div>
-        ))}
-      </div>
-    );
-  };
+  }, [isSkillsInView, isBioInView, skillsControls, bioControls]);
 
-  <style jsx>{`
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: ${isDarkMode ? '#1F2937' : '#F3F4F6'};
-      border-radius: 10px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: ${isDarkMode ? '#4B5563' : '#CBD5E1'};
-      border-radius: 10px;
-    }
-    
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: ${isDarkMode ? '#6B7280' : '#94A3B8'};
-    }
-  `}</style>
-  
   return (
     <section id="about" className="py-20 md:py-28 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -337,15 +207,15 @@ const AboutMe = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
         </motion.div>
         
-        <div className="flex flex-col lg:flex-row gap-12 items-center mb-24">
-          {/* Photo Gallery with enhanced styling */}
+        <div className="flex flex-col lg:flex-row gap-12 items-center mb-16">
+          {/* Photo Gallery */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
             className="w-full sm:w-3/4 md:w-3/5 lg:w-2/5 mx-auto lg:mx-0"
           >
-            <div className="relative w-full aspect-[4/5] sm:aspect-auto sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl shadow-black/10 dark:shadow-blue-900/10 border border-gray-200 dark:border-gray-800 group perspective">
+            <div className="relative w-full aspect-[4/5] sm:aspect-auto sm:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-800 group">
               {photos.map((photo, index) => (
                 <motion.div
                   key={index}
@@ -361,7 +231,7 @@ const AboutMe = () => {
                     <img 
                       src={photo.src}
                       alt={photo.alt}
-                      className="max-w-full max-h-full object-contain object-center rounded-2xl transition-all duration-500 group-hover:scale-[1.02] filter contrast-[1.02] saturate-[1.05]"
+                      className="max-w-full max-h-full object-contain object-center rounded-2xl transition-all duration-500 group-hover:scale-[1.02]"
                     />
                   </div>
                 </motion.div>
@@ -381,13 +251,10 @@ const AboutMe = () => {
                   />
                 ))}
               </div>
-              
-              {/* Decorative corner accent */}
-              <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 opacity-80 -translate-y-1/2 translate-x-1/2 rounded-full blur-xl"></div>
             </div>
           </motion.div>
           
-          {/* About Text with enhanced styling */}
+          {/* About Text */}
           <motion.div 
             ref={bioRef}
             initial="hidden"
@@ -400,7 +267,6 @@ const AboutMe = () => {
             className="lg:w-3/5 mt-12 lg:mt-0"
           >
             <div className="relative">
-              {/* Animated accent bar */}
               <motion.div 
                 initial={{ height: 0 }}
                 animate={{ height: "100%" }}
@@ -442,152 +308,99 @@ const AboutMe = () => {
                 </div>
 
                 <p className={`leading-relaxed text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                When I'm not coding, you'll find me working out since  <span className="text-yellow-300 
-text-shadow: yellow-500;">I'm a fitness freak</span>, watching anime, and of course, exploring new technologies—because I'm a continuous learner.
+                  When I'm not coding, you'll find me working out since I'm a fitness freak, watching anime, and of course, exploring new technologies—because I'm a continuous learner.
                 </p>
               </div>
             </div>
           </motion.div>
         </div>
         
-        {/* DSA and Skills Container */}
-        <div className="mt-8 md:mt-16 flex flex-col lg:flex-row gap-8 lg:gap-12">
-          {/* DSA Platforms Section with enhanced design */}
-          <motion.div
-            ref={dsaRef}
-            initial="hidden"
-            animate={dsaControls}
-            variants={{
-              visible: { opacity: 1, y: 0 },
-              hidden: { opacity: 0, y: 50 }
-            }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="w-full lg:w-2/5"
-          >
-            <div className="backdrop-blur-lg rounded-3xl border border-gray-200 dark:border-gray-800 p-8 shadow-xl hover:shadow-2xl transition-all duration-500">
-              <div className="flex items-center mb-8">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-600/10 mr-3">
-                  <FaCode className="text-2xl md:text-3xl text-blue-500" />
-                </div>
-                <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                  Competitive Programming
-                </h3>
-              </div>
-              <div className="space-y-6">
-                {dsaPlatforms.map((platform, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className="group"
-                  >
-                    <a
-                      href={platform.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-start p-5 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-800 transition-all duration-300 hover:shadow-lg group-hover:shadow-blue-500/5"
-                    >
-                      <div className="p-4 rounded-xl bg-gradient-to-br from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 mr-5 group-hover:scale-110 transition-all duration-300 shadow-md">
-                        {platform.icon}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between">
-                          <h4 className={`text-xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                            {platform.name}
-                          </h4>
-                          <FaExternalLinkAlt className="text-gray-400 group-hover:text-blue-500 transition-colors duration-300" />
-                        </div>
-                        <p className={`text-sm font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                          @{platform.username}
-                        </p>
-                        <p className={`text-sm font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                          {platform.stats}
-                        </p>
-                        {platform.description && (
-                          <p className={`text-sm mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                            {platform.description}
-                          </p>
-                        )}
-                        {platform.ranking && (
-                          <p className="text-blue-600 dark:text-blue-400 text-sm font-medium mt-2">
-                            {platform.ranking}
-                          </p>
-                        )}
-                      </div>
-                    </a>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+        {/* Skills Section */}
+        <motion.div
+          ref={skillsRef}
+          initial="hidden"
+          animate={skillsControls}
+          variants={{
+            visible: { opacity: 1, y: 0 },
+            hidden: { opacity: 0, y: 50 }
+          }}
+          transition={{ duration: 0.4, delay: 0.6 }}
+        >
+          <div className="text-center mb-8">
+            <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              My Skills Set 🌟
+            </h3>
+          </div>
           
-          {/* Skills Section with matching design to the left section */}
-          <motion.div
-            ref={skillsRef}
-            initial="hidden"
-            animate={skillsControls}
-            variants={{
-              visible: { opacity: 1, y: 0 },
-              hidden: { opacity: 0, y: 50 }
-            }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-            className="w-full lg:w-3/5"
-          >
-            <div className="backdrop-blur-lg rounded-3xl border border-gray-200 dark:border-gray-800 p-8 shadow-xl hover:shadow-2xl transition-all duration-500">
-              <div className="flex items-center mb-8 justify-center">
-             
-                <h3 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                  My Skills Set🌟
-                </h3>
-
-              </div>
-              
-              {/* Category Tabs - Enhanced with matching style */}
-              <div className="flex flex-wrap justify-center mb-8 gap-2">
-                {Object.keys(skillCategories).map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-6 py-3 rounded-full text-lg font-medium transition-all duration-500 ${
-                      selectedCategory === category
-                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20 scale-105"
-                        : "bg-gradient-to-br from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:shadow-md"
-                    }`}
-                  >
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </button>
-                ))}
-              </div>
-              
-              {/* Skills/Certifications content with fixed height and overflow */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={selectedCategory}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className={`${selectedCategory === "certifications" ? "h-80 overflow-y-auto pr-2 custom-scrollbar" : ""}`}
-                  style={{
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: isDarkMode ? '#4B5563 #1F2937' : '#CBD5E1 #F3F4F6'
-                  }}
+          {/* Skills Grid */}
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6 justify-items-center">
+            {allSkills.map((skill, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="flex flex-col items-center group cursor-pointer"
+              >
+                <div className="text-4xl md:text-5xl mb-2 group-hover:scale-110 transition-transform duration-500">
+                  {skill.icon}
+                </div>
+                <p className={`text-sm font-medium text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} group-hover:text-blue-500 transition-colors duration-300`}>
+                  {skill.name}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+        
+        {/* DSA Platform Buttons - Compact Grid Layout */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.8 }}
+          className="mt-12"
+        >
+          <div className="text-center mb-6">
+            <h4 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              Competitive Programming
+            </h4>
+          </div>
+          
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
+              {dsaPlatforms.map((platform, index) => (
+                <motion.a
+                  key={index}
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                  className="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-105 group min-w-[200px]"
                 >
-                  {selectedCategory === "certifications" 
-                    ? renderCertificationItems() 
-                    : renderSkillItems(selectedCategory)
-                  }
-                </motion.div>
-              </AnimatePresence>
+                  <div className="flex items-center flex-1 space-x-3">
+                    <div className="p-2 rounded bg-gradient-to-br from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 group-hover:scale-105 transition-all duration-300">
+                      {platform.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h5 className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-black'} truncate`}>
+                        {platform.name}
+                      </h5>
+                      <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} truncate`}>
+                        {platform.stats}
+                      </p>
+                    </div>
+                    <FaExternalLinkAlt className="text-xs text-gray-400 group-hover:text-blue-500 transition-colors duration-300 flex-shrink-0" />
+                  </div>
+                </motion.a>
+              ))}
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default AboutMe; 
-
-
+export default AboutMe;
