@@ -13,7 +13,7 @@ import profile from "./assets/profile.jpg"; // Replace with your actual profile 
 const PortfolioLanding = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [typedText, setTypedText] = useState('');
-  const introText = "Full-Stack Developer";
+  const introText = "A Full-Stack Developer || Software Engineer";
 
   const socialLinks = [
     { icon: FaGithub, url: 'https://github.com/Tejascodez' },
@@ -130,14 +130,14 @@ const PortfolioLanding = () => {
         >
           Projects
         </a>
-        <a
+        {/* <a
           href="/"
           className={`transition-all duration-300 font-medium ${
             isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-black'
           }`}
         >
           Contact
-        </a>
+        </a> */}
       </div>
 
       {/* Dark Mode Toggle Button */}
