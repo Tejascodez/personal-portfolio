@@ -43,7 +43,7 @@ const AboutMe = () => {
   // Tech colors mapping
   const techColors = {
     react: "text-blue-500",
-    next: "text-black dark:text-white",
+    next: "text-black-500 bg-white",
     node: "text-green-500",
     express: "text-gray-500", 
     mongodb: "text-green-600",
@@ -116,7 +116,7 @@ const AboutMe = () => {
     { name: "Git & GitHub", icon: <FaGitAlt className={techColors.git} /> },
     { name: "Docker", icon: <FaDocker className={techColors.docker} /> },
     { name: "Postman", icon: <SiPostman className={techColors.postman} /> },
-    { name: "Hopscotch", icon: <SiHoppscotch className="text-gray-800 dark:text-white" /> },
+    { name: "Hopscotch", icon: <SiHoppscotch className="text-black-500 bg-white" /> },
   ];
   
   // Certifications (commented out for now)
