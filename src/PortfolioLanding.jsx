@@ -221,6 +221,7 @@ const PortfolioLanding = () => {
             TEJAS PATIL
           </span>
         </motion.h1>
+        
 
         <motion.p
           initial={{ opacity: 0 }}
@@ -229,36 +230,51 @@ const PortfolioLanding = () => {
           className={`font-body font-bold text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-12 lg:mb-16 max-w-xs sm:max-w-md lg:max-w-2xl px-4 ${isDarkMode ? 'text-white' : 'text-black'}`}
         >
           {typedText}
+          
         </motion.p>
  
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="flex items-center justify-center sm:flex-row gap-3 sm:gap-4 mt-10 mb-6 sm:mb-8 w-full max-w-sm sm:max-w-none"
-        >
-          <a
-            href="https://drive.google.com/.../view"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-xl font-semibold text-gray-800 transition-all duration-300
-              before:content-[''] before:absolute before:-z-10 before:inset-0 before:rounded-xl before:p-[2px] 
-              before:bg-gradient-to-r before:from-cyan-400 before:via-pink-500 before:to-red-500
-              bg-white hover:shadow-lg hover:shadow-pink-500/20 text-sm sm:text-base"
-          >
-            View Resume🧾
-          </a>
+ <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 0.6 }}
+  className="flex items-center justify-center sm:flex-row gap-3 sm:gap-4 mt-10 mb-6 sm:mb-8 w-full max-w-sm sm:max-w-none"
+>
+  
+  {/* View Resume Button */}
+  <a
+    href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=sharing"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-xl font-semibold 
+      transition-all duration-300 ease-in-out overflow-hidden group
+      text-gray-800 dark:text-white 
+      bg-white dark:bg-neutral-900
+      before:content-[''] before:absolute before:-z-10 before:inset-0 before:rounded-xl before:p-[2px]
+      before:bg-gradient-to-r before:from-cyan-400 before:via-pink-500 before:to-red-500
+      hover:before:blur-md hover:before:scale-110
+      shadow-md dark:shadow-black/40 hover:shadow-pink-500/20 dark:hover:shadow-pink-500/30
+      text-sm sm:text-base"
+  >
+    <span className="relative z-10 group-hover:scale-105 transition-transform duration-200">View Resume 🧾</span>
+  </a>
 
-          <a
-            href="mailto:tejastp834@gmail.com"
-            className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-xl font-semibold text-gray-800 transition-all duration-300
-              before:content-[''] before:absolute before:-z-10 before:inset-0 before:rounded-xl before:p-[2px] 
-              before:bg-gradient-to-r before:from-cyan-400 before:via-pink-500 before:to-red-500
-              bg-white hover:shadow-lg hover:shadow-pink-500/20 text-sm sm:text-base"
-          >
-            Let's Connect🤝
-          </a>
-        </motion.div>
+  {/* Let's Connect Button */}
+  <a
+    href="mailto:tejastp834@gmail.com"
+    className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-xl font-semibold 
+      transition-all duration-300 ease-in-out overflow-hidden group
+      text-gray-800 dark:text-white 
+      bg-white dark:bg-neutral-900
+      before:content-[''] before:absolute before:-z-10 before:inset-0 before:rounded-xl before:p-[2px]
+      before:bg-gradient-to-r before:from-cyan-400 before:via-pink-500 before:to-red-500
+      hover:before:blur-md hover:before:scale-110
+      shadow-md dark:shadow-black/40 hover:shadow-pink-500/20 dark:hover:shadow-pink-500/30
+      text-sm sm:text-base"
+  >
+    <span className="relative z-10 group-hover:scale-105 transition-transform duration-200">Let's Connect 🤝</span>
+  </a>
+</motion.div>
+
       </header>
 
       <AboutMe />

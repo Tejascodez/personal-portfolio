@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker } from "react-icons/fa";
 import { SiNextdotjs, SiExpress, SiMongodb, SiMysql, SiTypescript, SiTailwindcss, SiBootstrap, SiPostman, SiHoppscotch, SiGraphql, SiPostgresql } from "react-icons/si";
-import pic2 from '../assets/pic2.png'
+import profile from '../assets/profile.jpg'
 
 const AboutMe = () => {
   const [activePhoto, setActivePhoto] = useState(0);
@@ -34,7 +34,7 @@ const AboutMe = () => {
   
   // Sample photos - using placeholder for demo
   const photos = [
-    { src: pic2, alt: "Profile photo 1" },
+    { src: profile, alt: "Profile photo 1" },
 
   ];
   

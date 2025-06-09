@@ -67,6 +67,19 @@ const Projects = () => {
   
   // Frontend Projects
   const frontendProjects = [
+  {
+  id: 4,
+  title: "Excali Clone (Draw app)",
+  description: "A collaborative, browser-based drawing application inspired by Excalidraw, enabling real-time diagramming and sketching with intuitive tools and smooth user interaction.",
+  technologies: [
+    "Node.js",
+    "Express",    "React (or Vue) front‑end",
+    "Canvas API / SVG",
+  ],
+  github: "https://github.com/Tejascodez/canvas-draw-app.git",
+  demo: "https://canvas-draw-app-zeta.vercel.app/",
+}
+,
     {
       id: 4,
       title: "CodeMentor AI",
@@ -184,10 +197,7 @@ const Projects = () => {
     }
   }, [isInView, controls, activeTab]);
 
-  // Function to open video modal
-  const openVideoModal = (video, title) => {
-    setVideoModal({ isOpen: true, video, title });
-  };
+
   
   return (
     <section id="projects" className={`mx-auto text-center py-20 px-6 m-0 max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8  overflow-hidden relative `}>
