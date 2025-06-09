@@ -103,14 +103,11 @@ const Projects = () => {
       github: "https://github.com/Tejascodez/porfoilio.git",
       demo: "https://tejas-portofolio.netlify.app/"
     },
- ,
   ];
   
   // Backend Projects
   const backendProjects = [
-
-
-       {
+    {
       id: 9,
       title: "AI MCQ Generator",
       description: "A library of reusable UI components built with React, Tailwind CSS, and Framer Motion.",
@@ -275,7 +272,7 @@ const Projects = () => {
           </button>
         </div>
         
-        {/* Projects Grid */}
+        {/* Projects Grid - Made responsive: grid-cols-1 on mobile, grid-cols-2 on md+ */}
         <motion.div
           ref={ref}
           initial="hidden"
@@ -285,163 +282,152 @@ const Projects = () => {
             hidden: { opacity: 0, y: 50 }
           }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-2 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
           {/* Frontend Projects */}
           {activeTab === "frontend" && frontendProjects.map((project, index) => (
+            <div key={project.id} className="min-h-90">
+              <div className="max-w-md mx-auto">
+                <SpotlightCard
+                  className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
+                    ${isDarkMode 
+                      ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
+                      : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
+                  spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
+                >
+                  <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    <div className="flex flex-col justify-between flex-grow p-6">
+                      {/* Title & Description */}
+                      <div>
+                        <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
+                          ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                          {project.title}
+                        </h3>
 
+                        <p className={`text-sm mb-4 leading-relaxed 
+                          ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {project.description}
+                        </p>
 
-                                      
-<div className="min-h-90">
- <div className="max-w-md mx-auto">
-  <SpotlightCard
-    className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
-      ${isDarkMode 
-        ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
-        : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
-    spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
-  >
-    <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-      <div className="flex flex-col justify-between flex-grow p-6">
-        {/* Title & Description */}
-        <div>
-          <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
-            ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            {project.title}
-          </h3>
+                        {/* Tech Stack */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {project.technologies.map((tech, i) => (
+                            <span
+                              key={i}
+                              className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
+                                ${isDarkMode 
+                                  ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
+                                  : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-          <p className={`text-sm mb-4 leading-relaxed 
-            ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            {project.description}
-          </p>
-
-          {/* Tech Stack */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {project.technologies.map((tech, i) => (
-              <span
-                key={i}
-                className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
-                  ${isDarkMode 
-                    ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
-                    : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-<div className="absolute bottom-6 right-4 flex gap-2 z-10">
-  <a
-    href={project.github}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
-      ${isDarkMode 
-        ? 'bg-white text-black' 
-        : 'bg-black text-white'}`}
-  >
-    <Github className="text-[11px]" /> Github 
-  </a>
-  <a
-    href={project.demo}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
-      ${isDarkMode 
-        ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
-        : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
-  >
-    <Globe className="text-[11px]" /> Website
-  </a>
-</div>
-
-
-      </div>
-    </div>
-  </SpotlightCard>
-</div>
-
-    </div>
-
-            
+                      {/* Action Buttons */}
+                      <div className="absolute bottom-6 right-4 flex gap-2 z-10">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
+                            ${isDarkMode 
+                              ? 'bg-white text-black' 
+                              : 'bg-black text-white'}`}
+                        >
+                          <Github className="text-[11px]" /> Github 
+                        </a>
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
+                            ${isDarkMode 
+                              ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
+                              : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
+                        >
+                          <Globe className="text-[11px]" /> Website
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </SpotlightCard>
+              </div>
+            </div>
           ))}
           
           {/* Backend Projects */}
           {activeTab === "backend" && backendProjects.map((project, index) => (
-      <div className="min-h-90">
- <div className="max-w-md mx-auto">
-  <SpotlightCard
-    className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
-      ${isDarkMode 
-        ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
-        : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
-    spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
-  >
-    <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-      <div className="flex flex-col justify-between flex-grow p-6">
-        {/* Title & Description */}
-        <div>
-          <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
-            ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            {project.title}
-          </h3>
+            <div key={project.id} className="min-h-90">
+              <div className="max-w-md mx-auto">
+                <SpotlightCard
+                  className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
+                    ${isDarkMode 
+                      ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
+                      : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
+                  spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
+                >
+                  <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    <div className="flex flex-col justify-between flex-grow p-6">
+                      {/* Title & Description */}
+                      <div>
+                        <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
+                          ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                          {project.title}
+                        </h3>
 
-          <p className={`text-sm mb-4 leading-relaxed 
-            ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            {project.description}
-          </p>
+                        <p className={`text-sm mb-4 leading-relaxed 
+                          ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {project.description}
+                        </p>
 
-          {/* Tech Stack */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {project.technologies.map((tech, i) => (
-              <span
-                key={i}
-                className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
-                  ${isDarkMode 
-                    ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
-                    : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
+                        {/* Tech Stack */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {project.technologies.map((tech, i) => (
+                            <span
+                              key={i}
+                              className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
+                                ${isDarkMode 
+                                  ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
+                                  : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-        {/* Action Buttons */}
-<div className="absolute bottom-6 right-4 flex gap-2 z-10">
-  <a
-    href={project.github}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
-      ${isDarkMode 
-        ? 'bg-white text-black' 
-        : 'bg-black text-white'}`}
-  >
-    <Github className="text-[11px]" /> Github 
-  </a>
-  <a
-    href={project.demo}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
-      ${isDarkMode 
-        ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
-        : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
-  >
-    <Globe className="text-[11px]" /> Website
-  </a>
-</div>
-
-
-      </div>
-    </div>
-  </SpotlightCard>
-</div>
-
-    </div>
+                      {/* Action Buttons */}
+                      <div className="absolute bottom-6 right-4 flex gap-2 z-10">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
+                            ${isDarkMode 
+                              ? 'bg-white text-black' 
+                              : 'bg-black text-white'}`}
+                        >
+                          <Github className="text-[11px]" /> Github 
+                        </a>
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
+                            ${isDarkMode 
+                              ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
+                              : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
+                        >
+                          <Globe className="text-[11px]" /> Website
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </SpotlightCard>
+              </div>
+            </div>
           ))}
           
           {/* Freelance Projects */}

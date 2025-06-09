@@ -140,11 +140,11 @@ const AboutMe = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
       
-          <div className="w-110  h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto md:mx-0 mb-6 rounded-full"></div>
-          
-          <h3 className="text-2xl md:text-3xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-            Full-Stack Developer  
-          </h3>
+          {/* <div className="w-110  h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto md:mx-0 mb-6 rounded-full"></div> */}
+       <h3 className="text-2xl md:text-3xl font-semibold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent text-center">
+  Full-Stack Developer
+</h3>
+
           
           <p className={`text-lg leading-relaxed mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} max-w-md`}>
             Passionate about creating innovative web solutions with clean code and exceptional user experiences. I bring ideas to life through modern technologies and creative problem-solving.
@@ -185,7 +185,7 @@ const AboutMe = () => {
           transition={{ duration: 0.6 }}
         >
           <h3 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            Technologies that i use!
+            Technologies that I use!
           </h3>
           
           {/* Skills Grid - Centered */}
