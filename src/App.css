@@ -12,3 +12,13 @@
   width: 100%;
   height: 100%;
 }
+.gradient-border-wrapper {
+  background: linear-gradient(135deg, #00ff85, #ff8a00); /* Gradient border */
+  padding: 2px; /* Border thickness */
+  border-radius: 1.5rem; /* Match inner border radius */
+}
+
+.gradient-border-inner {
+  border-radius: 1.4rem;
+  background-color: #0f0f0f; /* fallback dark bg */
+}

@@ -353,7 +353,7 @@ const AboutMe = () => {
           </div>
         </motion.div>
         
-        {/* DSA Platform Buttons - Compact Grid Layout */}
+        {/* DSA Platform Buttons - Compact Grid Layout
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -397,7 +397,7 @@ const AboutMe = () => {
               ))}
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );

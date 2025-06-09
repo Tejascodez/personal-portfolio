@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { FaWhatsapp, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
-import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker } from "react-icons/fa";
-import { SiNextdotjs, SiExpress, SiMongodb, SiMysql, SiTypescript, SiTailwindcss, SiBootstrap, SiPostman, SiHoppscotch } from "react-icons/si";
+import { Home, Code, Menu, User, FileText, Github, Twitter, Linkedin, Sun, Moon } from 'lucide-react';
 import { motion } from "framer-motion";
 import logo from "./assets/Tlgo.png";
 import Projects from "./components/Projects";
