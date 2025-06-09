@@ -1,18 +1,8 @@
 
 @import "tailwindcss";
-
-@keyframes hop {
-    from {
-      background-position: 0px;
-    }
-    to {
-      background-position: -768px; /* 6 frames * 128px width */
-    }
-  }
-  
-  /* Tailwind + custom */
-.glow-text-dark {
-  @apply text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)];
+:root {
+  --font-heading: 'Inter', system-ui;
+  --font-body:    'Inter', system-ui;
 }
-
-
+h1, h2, .font-heading { font-family: var(--font-heading); }
+body, p, .font-body { font-family: var(--font-body); }

@@ -193,7 +193,7 @@ const Projects = () => {
   };
   
   return (
-    <section id="projects" className={`py-24 relative ${isDarkMode ? 'bg-gray-950' : 'bg-white'}`}>
+    <section id="projects" className={`mx-auto text-center py-20 px-6 m-0 max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8  overflow-hidden relative `}>
       {/* Background gradient */}
       <div className={`absolute inset-0 ${isDarkMode 
         ? 'bg-gradient-to-b from-transparent to-gray-900/30' 
@@ -285,7 +285,7 @@ const Projects = () => {
             hidden: { opacity: 0, y: 50 }
           }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-2 gap-8"
         >
           {/* Frontend Projects */}
           {activeTab === "frontend" && frontendProjects.map((project, index) => (
