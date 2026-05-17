@@ -1,8 +1,8 @@
-
-@import "tailwindcss";
-:root {
-  --font-heading: 'Inter', system-ui;
-  --font-body:    'Inter', system-ui;
+@font-face {
+  font-family: "Moonich";
+  src: url("./assets/fonts/MoonichManufacture.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
-h1, h2, .font-heading { font-family: var(--font-heading); }
-body, p, .font-body { font-family: var(--font-body); }
+
+@import "tailwindcss";@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');

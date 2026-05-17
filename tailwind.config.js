@@ -7,8 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        fancy: ['"Great Vibes"', 'cursive'],
-        serifFancy: ['"Playfair Display"', 'serif'],
+        moonich: ["Moonich", "sans-serif"],
       },
     },
   },

@@ -1,8 +1,9 @@
-// Projects Section with Frontend, Backend, and Freelance Tabs
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion";
-import {  FaExternalLinkAlt, FaPlay, FaTimes } from "react-icons/fa";
-import { Github, Globe } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { FaExternalLinkAlt, FaPlay, FaTimes } from "react-icons/fa";
+import { Github, Globe, Video } from 'lucide-react';
+
+// Assets
 import img from '../assets/portfolio.png';
 import img1 from "../assets/souled.png";
 import img2 from '../assets/disney.png';
@@ -19,79 +20,225 @@ import cda from  "../assets/codementorai.png";
 import imgtrex from '../assets/Imgtrex.png';
 import imgtrexDemo from '../assets/ImgtrexDemo.mp4';
 import dempic8 from '../assets/demo8.png';
-import SpotlightCard from "./SpotlightCard";
+
+/* ────────────────────────────────────────────────
+   Styles — inherit CSS vars from PortfolioLanding
+   (--bg, --text, --muted, --border, --orange)
+──────────────────────────────────────────────── */
+const ProjectStyles = () => (
+  <style>{`
+    /* ── Section layout ── */
+    .pj-section {
+      padding: 96px 0;
+      border-top: 1px solid var(--border);
+      position: relative;
+      width: 100%;
+    }
+
+    /* ── Section tag header row ── */
+    .pj-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 56px;
+    }
+    .pj-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 11px;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--orange);
+    }
+    .pj-header-rule { flex:1; height:1px; background:var(--border); }
+    .pj-section-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300; font-size: 11px;
+      letter-spacing: .15em; color: var(--muted);
+    }
+
+    /* ── Tabs ── */
+    .pj-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .pj-tab {
+      background: transparent; border: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 14px;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer;
+      padding-bottom: 6px;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    .pj-tab:hover { color: var(--orange); }
+    .pj-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--orange);
+    }
+
+    /* ── Responsive Grid ── */
+    .pj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 32px;
+    }
+
+    /* ── Project Card ── */
+    .pj-card {
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      background: transparent;
+      transition: border-color .3s, transform .3s;
+      position: relative;
+    }
+    .pj-card:hover { border-color: var(--orange); transform: translateY(-4px); }
+
+    /* Image & Preview Overlay */
+    .pj-card-img-wrap {
+      position: relative; width: 100%;
+      aspect-ratio: 16/9; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: #111;
+    }
+    .pj-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover; opacity: 0.85;
+      transition: transform .5s, opacity .3s;
+    }
+    .pj-card:hover .pj-card-img { transform: scale(1.05); opacity: 0.4; }
+
+    .pj-card-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      opacity: 0; transition: opacity .3s;
+      backdrop-filter: blur(3px);
+    }
+    .pj-card:hover .pj-card-overlay { opacity: 1; }
+
+    .pj-overlay-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%; background: var(--orange);
+      color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; transform: translateY(10px);
+      transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background .2s, color .2s;
+    }
+    .pj-card:hover .pj-overlay-btn { transform: translateY(0); }
+    .pj-overlay-btn:hover { background: #fff; color: var(--orange); transform: translateY(-2px) scale(1.05); }
+
+    /* Card Body */
+    .pj-card-body {
+      padding: 24px; display: flex; flex-direction: column; flex: 1;
+    }
+    .pj-card-client {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 6px;
+    }
+    .pj-card-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: 22px; line-height: 1.1; text-transform: uppercase;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .pj-card-desc {
+      font-family: 'Barlow', sans-serif; font-weight: 300;
+      font-size: 14px; line-height: 1.6; color: var(--muted);
+      margin-bottom: 24px; flex: 1;
+    }
+
+    /* Tech Stack Pills */
+    .pj-card-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+    .pj-card-tech span {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 10px;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 4px 10px; border: 1px solid var(--border); color: var(--muted);
+    }
+
+    /* Card Footer Links (Text versions) */
+    .pj-card-footer {
+      display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 16px;
+    }
+    .pj-link {
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--text); text-decoration: none; cursor: pointer;
+      background: none; border: none; padding: 0; transition: color .2s;
+    }
+    .pj-link:hover { color: var(--orange); }
+
+    /* ── Modal ── */
+    .pj-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px); z-index: 100;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    .pj-modal {
+      width: 100%; max-width: 900px; background: var(--bg);
+      border: 1px solid var(--border); display: flex; flex-direction: column;
+    }
+    .pj-modal-header {
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .pj-modal-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 16px; letter-spacing: .1em; text-transform: uppercase; color: var(--text);
+    }
+    .pj-modal-close {
+      background: transparent; border: none; color: var(--muted);
+      cursor: pointer; transition: color .2s;
+    }
+    .pj-modal-close:hover { color: var(--orange); }
+    .pj-modal-body {
+      position: relative; width: 100%; aspect-ratio: 16/9; background: #000;
+    }
+    .pj-modal-video { width: 100%; height: 100%; outline: none; }
+  `}</style>
+);
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState("frontend");
-  const controls = useAnimation();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3 });
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [hoveredProject, setHoveredProject] = useState(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
   const [videoModal, setVideoModal] = useState({ isOpen: false, video: null, title: null });
   
-  // Update dark mode state when the document class changes
-  useEffect(() => {
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
-    };
-    
-    // Initial check
-    checkDarkMode();
-    
-    // Create a MutationObserver to watch for class changes on documentElement
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          checkDarkMode();
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, { attributes: true });
-    
-    return () => observer.disconnect();
-  }, []);
-
-  // Close modal when escape key is pressed
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === 'Escape' && videoModal.isOpen) {
         setVideoModal({ isOpen: false, video: null, title: null });
       }
     };
-
     window.addEventListener('keydown', handleEscKey);
     return () => window.removeEventListener('keydown', handleEscKey);
   }, [videoModal.isOpen]);
   
-  // Frontend Projects
+  // Data arrays 
   const frontendProjects = [
-  {
-  id: 4,
-  title: "Excali Clone (Draw app)",
-  description: "A collaborative, browser-based drawing application inspired by Excalidraw, enabling real-time diagramming and sketching with intuitive tools and smooth user interaction.",
-  technologies: [
-    "Node.js",
-    "Express",    "React (or Vue) front‑end",
-    "Canvas API / SVG",
-  ],
-  github: "https://github.com/Tejascodez/canvas-draw-app.git",
-  demo: "https://canvas-draw-app-zeta.vercel.app/",
-}
-,
     {
-      id: 4,
-      title: "CodeMentor AI",
-      description: "CodeMentor AI is a platform where user can improve their problem solving skills with the help of AI",
-      technologies: ["Node.js", "Express", "MongoDB","Clerk Auth", "JudgeO api", "Gemini API"],
-      image: cda,
-      github: "https://github.com/Dcode36/code_mentor_ai",
-      demo: "https://code-mentor-ai.vercel.app/",
+      id: "fe-0",
+      title: "Excali Clone",
+      description: "A collaborative, browser-based drawing application inspired by Excalidraw, enabling real-time diagramming and sketching.",
+      technologies: ["Node.js", "Express", "React", "Canvas API"],
+      image: img, // Fallback image since none was provided
+      github: "https://github.com/Tejascodez/canvas-draw-app.git",
+      demo: "https://canvas-draw-app-zeta.vercel.app/"
     },
     {
-      id: 1,
-      title: "Modern E-commerce Platform",
+      id: "fe-1",
+      title: "CodeMentor AI",
+      description: "Platform where users can improve their problem-solving skills with the help of AI feedback and code execution.",
+      technologies: ["Node.js", "Express", "MongoDB", "Clerk", "Gemini API"],
+      image: cda,
+      github: "https://github.com/Dcode36/code_mentor_ai",
+      demo: "https://code-mentor-ai.vercel.app/"
+    },
+    {
+      id: "fe-2",
+      title: "Modern E-commerce",
       description: "A fully responsive e-commerce website with dynamic product filtering, cart functionality, and user authentication.",
       technologies: ["React", "CSS", "Firebase"],
       image: img1,
@@ -99,482 +246,241 @@ const Projects = () => {
       demo: "https://resplendent-capybara-9fb345.netlify.app/"
     },
     {
-      id: 2,
-      title: "Disney + Clone",
-      description: "Interactive clone application with enhance ui of disney +  and customizable alerts.",
-      technologies: ["React.js", "javascript", "firebase api", "firebase"],
+      id: "fe-3",
+      title: "Disney+ Clone",
+      description: "Interactive clone application with enhanced UI of Disney+ and customizable dynamic alerts.",
+      technologies: ["React.js", "JavaScript", "Firebase"],
       image: img2,
       github: "https://github.com/Tejascodez/disney-clone.git",
       demo: "https://adorable-malasada-34094b.netlify.app/"
     },
     {
-      id: 3,
+      id: "fe-4",
       title: "Portfolio Website",
       description: "A creative portfolio website showcasing projects and skills with smooth animations and interactive elements.",
-      technologies: ["React", "CSS", "Framer Motion", "javascript" , "animation"],
+      technologies: ["React", "Framer Motion", "Animation"],
       image: img,
       github: "https://github.com/Tejascodez/porfoilio.git",
       demo: "https://tejas-portofolio.netlify.app/"
-    },
+    }
   ];
   
-  // Backend Projects
   const backendProjects = [
     {
-      id: 9,
+      id: "be-1",
       title: "AI MCQ Generator",
-      description: "A library of reusable UI components built with React, Tailwind CSS, and Framer Motion.",
-      technologies: ["typscript", "LLama", "AI", "Taintwind CSS", "Node.js", "Express", "whisper API"],
+      description: "Generates multiple-choice questions from video inputs using LLMs and speech-to-text processing.",
+      technologies: ["TypeScript", "LLama", "Node.js", "Whisper API"],
       image: dempic8,
-      github: "https://github.com/Tejascodez/video-mcq-ai.git",
-
+      github: "https://github.com/Tejascodez/video-mcq-ai.git"
     },
     {
-      id: 5,
-      title: "Imgtrex AI Image Generator",
-      description: "Imgtrex generates the images based on the prompt with user freindly ui.",
-      technologies: ["Node.js", "Express", "MongoDB", "JWT", "HuggingFace API"],
+      id: "be-2",
+      title: "Imgtrex AI Generator",
+      description: "Generates images based on text prompts utilizing open-source models with a user-friendly UI.",
+      technologies: ["Node.js", "Express", "MongoDB", "HuggingFace"],
       image: imgtrex,
       github: "https://github.com/Tejascodez/Imgtrex.git",
-      demoVideo: imgtrexDemo,
+      demoVideo: imgtrexDemo
     },
     {
-      id: 6,
+      id: "be-3",
       title: "TBlog Spot",
       description: "RESTful API for a blog platform with user authentication, post management, and comment functionality.",
       technologies: ["Node.js", "Express", "MongoDB", "JWT"],
       image: demopic1,
       github: "https://github.com/Tejascodez/tblog-spot.git",
-      demoVideo: demo2,
+      demoVideo: demo2
     },
     {
-      id: 6,
-      title: "Ebook Store Rent/buy",
-      description: "Backend for a task management application with user roles, task assignments, and real-time notifications.",
-      technologies: ["Node.js", "Express", "Mongodb", "JWT"],
+      id: "be-4",
+      title: "Ebook Store Backend",
+      description: "Backend architecture handling ebook rentals and purchases, including role-based access control.",
+      technologies: ["Node.js", "Express", "MongoDB", "JWT"],
       image: demopic2,
       github: "https://github.com/Tejascodez/Realm.git",
-      demoVideo: demo1,
+      demoVideo: demo1
     },
     {
-      id: 7,
+      id: "be-5",
       title: "E-commerce API",
       description: "Scalable backend for an e-commerce platform with product catalog, order processing, and payment integration.",
-      technologies: ["Node js", "Express", "MongoDB", "Clerk", "tailwind CSS"],
+      technologies: ["Node.js", "Express", "Clerk"],
       image: demopic3,
       github: "https://github.com/Tejascodez/E-com.git",
-      demoVideo: demo3,
+      demoVideo: demo3
     },
     {
-      id: 8,
-      title: "Ui Frontend Library",
-      description: "A library of reusable UI components built with React, Tailwind CSS, and Framer Motion.",
-      technologies: ["typscript", "Shadcn", "Alcenity UI", "Taintwind CSS"],
+      id: "be-6",
+      title: "UI Frontend Library",
+      description: "A library of reusable UI components built strictly for performance and smooth micro-interactions.",
+      technologies: ["TypeScript", "Shadcn", "Tailwind CSS"],
       image: demopic4,
       github: "https://github.com/Tejascodez/ui-library.git",
-      demoVideo: demo4,
+      demoVideo: demo4
     }
   ];
   
-  // Freelance Projects
   const freelanceProjects = [
     {
-      id: 9,
-      title: "KING LOGISTICS INFO WEBSITE",
-      description: "Custom-built responsive website for a local Logistics services to showcase there services.",
+      id: "fl-1",
+      title: "King Logistics",
+      client: "King Logistics & Solutions",
+      description: "Custom-built responsive website for a local Logistics service featuring a booking and tracking system.",
       technologies: ["React", "CSS", "Node.js"],
       image: freelance,
-      liveLink: "https://heroic-longma-efd468.netlify.app/",
-      completedDate: "March 2025",
-      client: "King Logistics & Solutions",
-      testimonial: "Tejas delivered a stunning website that exceeded our expectations. The reservation system has increased our bookings by 40%."
-    },
+      demo: "https://heroic-longma-efd468.netlify.app/",
+      completedDate: "March 2025"
+    }
   ];
   
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
+  // Select active data
+  const getCurrentProjects = () => {
+    switch(activeTab) {
+      case "frontend": return frontendProjects;
+      case "backend": return backendProjects;
+      case "freelance": return freelanceProjects;
+      default: return frontendProjects;
     }
-  }, [isInView, controls, activeTab]);
+  };
 
-
-  
   return (
-    <section id="projects" className={`mx-auto text-center py-20 px-6 m-0 max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8  overflow-hidden relative `}>
-      {/* Background gradient */}
-      <div className={`absolute inset-0 ${isDarkMode 
-        ? 'bg-gradient-to-b from-transparent to-gray-900/30' 
-        : 'bg-gradient-to-b from-transparent to-gray-200/50'} pointer-events-none`}></div>
-      
-      <div className="container mx-auto px-6 max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-16"
-        >
-          <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'black'}`}>
-            <span className="relative inline-block">
-              My Projects✨
-              <motion.span
-  className="block w-24 h-1 mx-auto mt-4  rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
-  animate={{
-    backgroundPosition: ['0% 50%', '100% 50%'],
-  }}
-  transition={{
-    duration: 3,
-    repeat: Infinity,
-    repeatType: 'reverse',
-    ease: 'linear',
-  }}
-/>
-            </span>
-          </h2>
-          <p className={`mt-4 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Explore my latest projects showcasing my skills in frontend, backend development, and client work.
-          </p>
-        </motion.div>
+    <section id="projects" className="pj-section" ref={ref}>
+      <ProjectStyles />
 
-        
-        {/* Category Tabs */}
-        <div className="flex justify-center mb-12 flex-wrap">
-          <button
-            onClick={() => setActiveTab("frontend")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
-              ${activeTab === "frontend"
-                ? isDarkMode 
-                  ? "bg-white text-black shadow-lg" 
-                  : "bg-gray-800 text-white shadow-lg"
-                : isDarkMode
-                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
-                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
-              } rounded-l-full`}
-          >
-            Frontend
-          </button>
-          <button
-            onClick={() => setActiveTab("backend")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
-              ${activeTab === "backend"
-                ? isDarkMode 
-                  ? "bg-white text-black shadow-lg" 
-                  : "bg-gray-800 text-white shadow-lg"
-                : isDarkMode
-                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
-                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
-              } border-l-0 border-r-0`}
-          >
-            Full Stack 
-          </button>
-          <button
-            onClick={() => setActiveTab("freelance")}
-            className={`px-6 py-3 md:px-8 text-lg font-medium transition-all duration-300 
-              ${activeTab === "freelance"
-                ? isDarkMode 
-                  ? "bg-white text-black shadow-lg" 
-                  : "bg-gray-800 text-white shadow-lg"
-                : isDarkMode
-                  ? "bg-gray-900 text-white border border-gray-800 hover:bg-gray-800"
-                  : "bg-gray-200 black border border-gray-300 hover:bg-gray-300"
-              } rounded-r-full`}
-          >
-            Freelance
-          </button>
+      <div className="pf-container">
+        {/* ── Header row ── */}
+        <div className="pj-header">
+          <span className="pj-tag">Selected Works</span>
+          <div className="pj-header-rule" />
+          <span className="pj-section-num">03</span>
         </div>
-        
-        {/* Projects Grid - Made responsive: grid-cols-1 on mobile, grid-cols-2 on md+ */}
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={controls}
-          variants={{
-            visible: { opacity: 1, y: 0 },
-            hidden: { opacity: 0, y: 50 }
-          }}
-          transition={{ duration: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+
+        {/* ── Tabs ── */}
+        <div className="pj-tabs">
+          <button 
+            className={`pj-tab ${activeTab === "frontend" ? "active" : ""}`}
+            onClick={() => setActiveTab("frontend")}
+          >Frontend</button>
+          <button 
+            className={`pj-tab ${activeTab === "backend" ? "active" : ""}`}
+            onClick={() => setActiveTab("backend")}
+          >Full Stack / Backend</button>
+          <button 
+            className={`pj-tab ${activeTab === "freelance" ? "active" : ""}`}
+            onClick={() => setActiveTab("freelance")}
+          >Freelance</button>
+        </div>
+
+        {/* ── Projects Grid ── */}
+        <motion.div 
+          layout
+          className="pj-grid"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Frontend Projects */}
-          {activeTab === "frontend" && frontendProjects.map((project, index) => (
-            <div key={project.id} className="min-h-90">
-              <div className="max-w-md mx-auto">
-                <SpotlightCard
-                  className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
-                    ${isDarkMode 
-                      ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
-                      : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
-                  spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
-                >
-                  <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                    <div className="flex flex-col justify-between flex-grow p-6">
-                      {/* Title & Description */}
-                      <div>
-                        <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
-                          ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                          {project.title}
-                        </h3>
-
-                        <p className={`text-sm mb-4 leading-relaxed 
-                          ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          {project.description}
-                        </p>
-
-                        {/* Tech Stack */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {project.technologies.map((tech, i) => (
-                            <span
-                              key={i}
-                              className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
-                                ${isDarkMode 
-                                  ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
-                                  : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="absolute bottom-6 right-4 flex gap-2 z-10">
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
-                            ${isDarkMode 
-                              ? 'bg-white text-black' 
-                              : 'bg-black text-white'}`}
-                        >
-                          <Github className="text-[11px]" /> Github 
-                        </a>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
-                            ${isDarkMode 
-                              ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
-                              : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
-                        >
-                          <Globe className="text-[11px]" /> Website
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </SpotlightCard>
-              </div>
-            </div>
-          ))}
-          
-          {/* Backend Projects */}
-          {activeTab === "backend" && backendProjects.map((project, index) => (
-            <div key={project.id} className="min-h-90">
-              <div className="max-w-md mx-auto">
-                <SpotlightCard
-                  className={`group overflow-hidden transition-all duration-300 hover:shadow-xl rounded-2xl border 
-                    ${isDarkMode 
-                      ? 'border-yellow-500/30 bg-gray-900 hover:shadow-cyan-500/20' 
-                      : 'border-gray-200 bg-white hover:shadow-gray-400/30'}`}
-                  spotlightColor={isDarkMode ? "rgba(59, 130, 246, 0.1)" : "rgba(0, 0, 0, 0.05)"}
-                >
-                  <div className={`flex flex-col h-80 w-80 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                    <div className="flex flex-col justify-between flex-grow p-6">
-                      {/* Title & Description */}
-                      <div>
-                        <h3 className={`text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300 
-                          ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                          {project.title}
-                        </h3>
-
-                        <p className={`text-sm mb-4 leading-relaxed 
-                          ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          {project.description}
-                        </p>
-
-                        {/* Tech Stack */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {project.technologies.map((tech, i) => (
-                            <span
-                              key={i}
-                              className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors duration-200 
-                                ${isDarkMode 
-                                  ? 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700' 
-                                  : 'bg-gray-200 text-gray-700 border-gray-400 hover:bg-gray-300'}`}
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="absolute bottom-6 right-4 flex gap-2 z-10">
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`font-medium text-[10px] py-1 px-2 rounded-md transition-all duration-300 hover:scale-105 flex items-center gap-1
-                            ${isDarkMode 
-                              ? 'bg-white text-black' 
-                              : 'bg-black text-white'}`}
-                        >
-                          <Github className="text-[11px]" /> Github 
-                        </a>
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`font-medium text-[10px] py-1 px-2 rounded-md border transition-all duration-300 hover:scale-105 flex items-center gap-1
-                            ${isDarkMode 
-                              ? 'bg-transparent text-white border-white hover:bg-white hover:text-black' 
-                              : 'bg-transparent text-black border-black hover:bg-black hover:text-white'}`}
-                        >
-                          <Globe className="text-[11px]" /> Website
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </SpotlightCard>
-              </div>
-            </div>
-          ))}
-          
-          {/* Freelance Projects */}
-          {activeTab === "freelance" && freelanceProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`group rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl
-                ${isDarkMode 
-                  ? 'bg-gray-900 border-gray-800 hover:border-white hover:shadow-white/5' 
-                  : 'bg-white border-gray-200 hover:border-gray-400 hover:shadow-gray-200'}`}
-            >
-              <div className="relative">
-                <div className={`absolute top-2 right-2 z-10 text-xs px-3 py-1 rounded-full font-medium
-                  ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}>
-                  Client Project
-                </div>
-                <div className="h-56 overflow-hidden relative">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                    <a 
-                      href={project.liveLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className={`font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 flex items-center
-                        ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}
-                    >
-                      <FaExternalLinkAlt className="mr-2" /> Live Site
-                    </a>
+          <AnimatePresence mode="wait">
+            {getCurrentProjects().map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
+                className="pj-card"
+              >
+                {/* Image & Overlay Previews */}
+                <div className="pj-card-img-wrap">
+                  <img src={project.image} alt={project.title} className="pj-card-img" />
+                  
+                  <div className="pj-card-overlay">
+                    {project.demo && (
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer" className="pj-overlay-btn" title="Live Website">
+                        <Globe size={18} />
+                      </a>
+                    )}
+                    {project.demoVideo && (
+                      <button 
+                        onClick={() => setVideoModal({ isOpen: true, video: project.demoVideo, title: project.title })}
+                        className="pj-overlay-btn" title="Watch Demo Video"
+                      >
+                        <FaPlay size={14} style={{ marginLeft: '2px' }} />
+                      </button>
+                    )}
+                    {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="pj-overlay-btn" title="Source Code">
+                        <Github size={18} />
+                      </a>
+                    )}
                   </div>
                 </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className={`text-xl font-bold transition-colors duration-300
-                    ${isDarkMode 
-                      ? 'text-white group-hover:text-gray-300 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]' 
-                      : 'black group-hover:text-gray-600'}`}>
-                    {project.title}
-                  </h3>
-                  <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
-                    {project.completedDate}
-                  </span>
-                </div>
-                <p className={`mb-3 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {project.description}
-                </p>
-                
-                <div className="mb-4">
-                  <div className={`font-medium text-sm mb-1 ${isDarkMode ? 'text-white' : 'black'}`}>
-                    Client:
+
+                {/* Card Info */}
+                <div className="pj-card-body">
+                  {project.client && <div className="pj-card-client">Client: {project.client}</div>}
+                  <h3 className="pj-card-title">{project.title}</h3>
+                  <p className="pj-card-desc">{project.description}</p>
+                  
+                  <div className="pj-card-tech">
+                    {project.technologies.map((tech, idx) => (
+                      <span key={idx}>{tech}</span>
+                    ))}
                   </div>
-                  <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                    {project.client}
+
+                  {/* Text Links Footer */}
+                  <div className="pj-card-footer">
+                    {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="pj-link">
+                        <Github size={13} /> Code
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer" className="pj-link">
+                        <FaExternalLinkAlt size={11} /> Live Demo
+                      </a>
+                    )}
+                    {project.demoVideo && (
+                      <button onClick={() => setVideoModal({ isOpen: true, video: project.demoVideo, title: project.title })} className="pj-link">
+                        <Video size={13} /> Watch Demo
+                      </button>
+                    )}
                   </div>
                 </div>
-                
-                <div className={`mb-4 border rounded-lg p-3 italic text-sm
-                  ${isDarkMode 
-                    ? 'bg-gray-800 black text-gray-300' 
-                    : 'bg-gray-100 border-gray-200 text-gray-700'}`}>
-                  "{project.testimonial}"
-                </div>
-                
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {project.technologies.map((tech, i) => (
-                    <span 
-                      key={i} 
-                      className={`px-3 py-1 rounded-full text-sm 
-                        ${isDarkMode 
-                          ? 'bg-gray-800 text-gray-300 border black' 
-                          : 'bg-gray-200 text-gray-700 border border-gray-300'}`}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
       </div>
 
-      {/* Video Modal */}
+      {/* ── Video Modal ── */}
       <AnimatePresence>
         {videoModal.isOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80"
+            className="pj-modal-backdrop"
             onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
           >
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25 }}
-              className={`relative max-w-4xl w-full rounded-xl overflow-hidden shadow-2xl ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
-              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="pj-modal"
+              onClick={e => e.stopPropagation()}
             >
-              <div className={`p-4 flex justify-between items-center border-b ${isDarkMode ? 'black' : 'border-gray-200'}`}>
-                <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'black'}`}>
-                  {videoModal.title} - Demo Preview
-                </h3>
+              <div className="pj-modal-header">
+                <span className="pj-modal-title">{videoModal.title} — Preview</span>
                 <button 
+                  className="pj-modal-close"
                   onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
-                  className={`p-2 rounded-full hover:bg-opacity-10 transition-colors
-                    ${isDarkMode ? 'hover:bg-white text-white' : 'hover:bg-gray-800 black'}`}
                 >
-                  <FaTimes size={20} />
+                  <FaTimes size={18} />
                 </button>
               </div>
-              <div className="relative pt-[56.25%]"> {/* 16:9 aspect ratio */}
-                <video 
-                  src={videoModal.video} 
-                  className="absolute top-0 left-0 w-full h-full object-contain bg-black"
-                  controls
-                  autoPlay
-                />
-              </div>
-              <div className={`p-4 flex justify-end ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-                <button 
-                  onClick={() => setVideoModal({ isOpen: false, video: null, title: null })}
-                  className={`px-4 py-2 rounded-lg font-medium
-                    ${isDarkMode 
-                      ? 'bg-gray-800 text-white hover:bg-gray-700' 
-                      : 'bg-gray-200 black hover:bg-gray-300'}`}
-                >
-                  Close
-                </button>
+              <div className="pj-modal-body">
+                <video src={videoModal.video} className="pj-modal-video" controls autoPlay />
               </div>
             </motion.div>
           </motion.div>
