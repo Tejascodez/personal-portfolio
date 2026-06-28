@@ -1,673 +1,627 @@
-import React, { useState, useEffect } from "react";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
-import { Menu, Github, Twitter, Linkedin, X, ArrowUpRight } from 'lucide-react';
-import { motion, AnimatePresence } from "framer-motion";
-import AboutMe from "./components/AboutMe";
-import Projects from "./components/Projects";
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { Github, Twitter, Linkedin, ArrowUpRight, Home, Briefcase, User, Code, Mail, Play, Sun, Moon } from "lucide-react";
+import { FaReact, FaNodeJs, FaJava, FaJs, FaGitAlt, FaDocker, FaBrain, FaSitemap, FaCubes } from "react-icons/fa";
+import { SiNextdotjs, SiExpress, SiMongodb, SiTypescript, SiTailwindcss, SiPostman, SiGraphql, SiPostgresql, SiSpringboot, SiRedis, SiLeetcode, SiGeeksforgeeks } from "react-icons/si";
 
-// IMPORT YOUR IMAGE HERE (Adjust the path based on where this file is located)
-import profile from './assets/profile.png';
+import profileImg  from "./assets/pic3.png";
+import cdaImg      from "./assets/codementorai.png";
+import imgtrexImg  from "./assets/Imgtrex.png";
+import portfolioImg from "./assets/portfolio.png";
+import excaliImg from "./assets/excali.png";
+import freelanceImg from "./assets/freelance1.png";
+import demopic1Img from "./assets/demopic1.png";
+import dempic8Img  from "./assets/demo8.png";
 
-/* ── Fonts + global styles injected once ── */
-const GlobalStyles = () => (
+/* ══════════════════════════════════════════════
+   THEME
+══════════════════════════════════════════════ */
+const DARK = {
+  wrap:"#0d0d0d", bg2:"#141414", text:"#ffffff", muted:"#888888",
+  border:"rgba(255,255,255,0.07)", card:"rgba(255,255,255,0.025)",
+  input:"rgba(255,255,255,0.05)", inputBorder:"rgba(255,255,255,0.09)",
+  nav:"rgba(13,13,13,0.9)", navBorder:"rgba(255,255,255,0.08)",
+  hoverRow:"rgba(255,255,255,0.025)", tagBorder:"rgba(255,255,255,0.08)",
+  tagColor:"#666", arrowBorder:"rgba(255,255,255,0.09)", arrowColor:"#555",
+  formBg:"rgba(255,255,255,0.025)", formBorder:"rgba(255,255,255,0.07)",
+  sidebarBg:"#0f0f0f",
+};
+const LIGHT = {
+  wrap:"#f5f5f5", bg2:"#ebebeb", text:"#111111", muted:"#666666",
+  border:"rgba(0,0,0,0.08)", card:"rgba(0,0,0,0.03)",
+  input:"rgba(0,0,0,0.05)", inputBorder:"rgba(0,0,0,0.12)",
+  nav:"rgba(248,248,248,0.92)", navBorder:"rgba(0,0,0,0.1)",
+  hoverRow:"rgba(0,0,0,0.025)", tagBorder:"rgba(0,0,0,0.1)",
+  tagColor:"#888", arrowBorder:"rgba(0,0,0,0.1)", arrowColor:"#888",
+  formBg:"rgba(0,0,0,0.02)", formBorder:"rgba(0,0,0,0.08)",
+  sidebarBg:"#eeeeee",
+};
+
+const ThemeCtx = createContext({ isDark:true, toggle:()=>{}, t:DARK, activeTab:"home", setActiveTab:()=>{} });
+const useTheme = () => useContext(ThemeCtx);
+
+/* ══════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════ */
+const projectsData = [
+  { id:5, title:"AI MCQ Generator",      desc:"Generates MCQs from video inputs using LLMs and speech-to-text.",         thumb:dempic8Img,   tags:["TypeScript","LLama","Whisper API"], github:"https://github.com/Tejascodez/video-mcq-ai.git" },
+  { id:1, title:"CodeMentor AI",        desc:"AI-powered coding platform with real-time feedback and code execution.", thumb:cdaImg,       tags:["Node.js","MongoDB","Gemini API"], github:"https://github.com/Dcode36/code_mentor_ai", demo:"https://code-mentor-ai.vercel.app/" },
+  { id:2, title:"Imgtrex AI Generator", desc:"Text-to-image generator using open-source HuggingFace models.",          thumb:imgtrexImg,   tags:["Node.js","Express","HuggingFace"], github:"https://github.com/Tejascodez/Imgtrex.git" },
+  { id:3, title:"Excali Clone",          desc:"Collaborative browser-based drawing app with real-time diagramming.",     thumb:excaliImg, tags:["React","Node.js","Canvas API"], github:"https://github.com/Tejascodez/canvas-draw-app.git", demo:"https://canvas-draw-app-zeta.vercel.app/" },
+  { id:4, title:"King Logistics",        desc:"Custom logistics website with booking and tracking system. Freelance.",   thumb:freelanceImg, tags:["React","CSS","Node.js"], demo:"https://heroic-longma-efd468.netlify.app/" },
+  { id:6, title:"TBlog Spot",            desc:"RESTful blog platform with authentication, post management, comments.",   thumb:demopic1Img,  tags:["Node.js","Express","MongoDB"], github:"https://github.com/Tejascodez/tblog-spot.git" },
+];
+
+const experienceData = [
+  { company:"Cognizant Technology Solutions", role:"Programmer Analyst Trainee", date:"July 2025 — Present", current:true,  desc:"Enterprise-scale full-stack development focusing on Java, Spring Boot, and cloud-based microservices architecture.", tags:["Java","Spring Boot","Microservices","Cloud"] },
+  { company:"IGap Technologies",              role:"Web Developer Intern",        date:"2024",               current:false, desc:"Built full-stack features using React and Node.js. Implemented RESTful APIs with MongoDB. Agile sprints and code reviews.", tags:["React","Node.js","MongoDB","REST API"] },
+];
+
+const toolsData = [
+  { name:"DSA",            icon:<FaBrain />,      color:"#F15A24" },{ name:"Java",         icon:<FaJava />,       color:"#E76F00" },
+  { name:"System Design",  icon:<FaSitemap />,    color:"#7C3AED" },{ name:"Microservices",icon:<FaCubes />,      color:"#0EA5E9" },
+  { name:"React",          icon:<FaReact />,      color:"#61DAFB" },{ name:"Next.js",      icon:<SiNextdotjs />,  color:"#888" },
+  { name:"TypeScript",     icon:<SiTypescript />, color:"#3178C6" },{ name:"JavaScript",   icon:<FaJs />,         color:"#F7DF1E" },
+  { name:"Node.js",        icon:<FaNodeJs />,     color:"#68A063" },{ name:"Express",      icon:<SiExpress />,    color:"#aaa" },
+  { name:"MongoDB",        icon:<SiMongodb />,    color:"#47A248" },{ name:"PostgreSQL",   icon:<SiPostgresql />, color:"#336791" },
+  { name:"Spring Boot",    icon:<SiSpringboot />, color:"#6DB33F" },{ name:"Redis",        icon:<SiRedis />,      color:"#DC382D" },
+  { name:"Tailwind",       icon:<SiTailwindcss />,color:"#38BDF8" },{ name:"GraphQL",      icon:<SiGraphql />,    color:"#E10098" },
+  { name:"Docker",         icon:<FaDocker />,     color:"#2496ED" },{ name:"Git",          icon:<FaGitAlt />,     color:"#F05032" },
+  { name:"Postman",        icon:<SiPostman />,    color:"#FF6C37" },
+];
+
+const thoughtsData = [
+  { title:"Building Scalable MERN Applications", excerpt:"Architecture decisions to deployment — lessons from production apps.", date:"Jan 2025", readTime:"5 min" },
+  { title:"Why I Chose the MERN Stack",          excerpt:"How JS full-stack simplifies collaboration and dev cycles.",           date:"Oct 2024", readTime:"4 min" },
+  { title:"CodeMentor AI — Architecture Dive",   excerpt:"Integrating Gemini API with Node.js for real-time AI feedback.",       date:"Nov 2024", readTime:"6 min" },
+];
+
+/* ══════════════════════════════════════════════
+   GLOBAL STYLES
+══════════════════════════════════════════════ */
+const GlobalStyles = ({ isDark }) => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;700;800;900&family=Barlow:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html, body { height:100%; overflow:hidden; }
+    body { cursor:none; font-family:'Outfit',sans-serif; }
+    input, textarea, select { cursor:text !important; }
+    a, button { cursor:none; }
+    @media(hover:none){ body{cursor:auto;} .pf-cursor{display:none!important} a,button{cursor:pointer!important} }
 
-    :root {
-      --orange: #F15A24;
+    .pf-wrap {
+      width:100vw; height:100vh; overflow:hidden; display:flex; flex-direction:column;
+      background:${isDark?DARK.wrap:LIGHT.wrap}; color:${isDark?DARK.text:LIGHT.text};
+      font-family:'Outfit',sans-serif; transition:background .3s,color .3s;
     }
 
-    .pf-dark  { --bg:#090909; --text:#FFFFFF; --muted:#606060; --border:rgba(255,255,255,0.07); }
-    .pf-light { --bg:#F0EDEA; --text:#0A0A0A; --muted:#777777; --border:rgba(0,0,0,0.10); }
+    .right-panel::-webkit-scrollbar { width:3px; }
+    .right-panel::-webkit-scrollbar-track { background:transparent; }
+    .right-panel::-webkit-scrollbar-thumb { background:#F15A24; border-radius:2px; }
 
-    .pf-wrap { background:var(--bg); color:var(--text); min-height:100vh; transition:background .3s,color .3s; position:relative; }
+    .sidebar-scroll::-webkit-scrollbar { width:2px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background:${isDark?"rgba(255,255,255,0.08)":"rgba(0,0,0,0.1)"}; }
 
-    /* noise overlay */
-    .pf-wrap::before {
-      content:''; position:fixed; inset:0; pointer-events:none; z-index:9998; opacity:.032;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
+    @keyframes ping-dot { 0%{transform:scale(1);opacity:.8} 70%{transform:scale(2.2);opacity:0} 100%{transform:scale(0);opacity:0} }
 
-    /* ── Layout Container ── */
-    .pf-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 32px;
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-    }
+    .tag { font-size:9px; color:${isDark?DARK.tagColor:LIGHT.tagColor}; text-transform:uppercase; letter-spacing:.08em; padding:3px 8px; border:1px solid ${isDark?DARK.tagBorder:LIGHT.tagBorder}; border-radius:5px; }
 
-    /* ── Hero Split Layout ── */
-    .pf-hero-layout {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-
-    .pf-hero-text {
-      flex: 1;
-      max-width: 620px;
-    }
-
-    .pf-hero-image-wrapper {
-      flex: 0 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      margin-left: -80px;
-      z-index: 3;
-    }
-
-    .pf-hero-pic {
-      width: 100%;
-      max-width: 480px;
-      height: auto;
-      object-fit: contain;
-      position: relative;
-      z-index: 2;
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 18%), linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%);
-      -webkit-mask-composite: destination-in;
-      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 18%), linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%);
-      mask-composite: intersect;
-    }
-
-    /* ── NEW: Image animations ── */
-    @keyframes floatImg {
-      0%,100% { transform: translateY(0px); }
-      50%      { transform: translateY(-10px); }
-    }
-    @keyframes spinRing {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes spinRingRev {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(-360deg); }
-    }
-    @keyframes pulseGlow {
-      0%,100% { opacity: 0.18; transform: scale(1) translateX(-50%); }
-      50%      { opacity: 0.30; transform: scale(1.07) translateX(-50%); }
-    }
-    @keyframes tagBob1 {
-      0%,100% { transform: translateY(0px) rotate(-2deg); }
-      50%      { transform: translateY(-6px) rotate(-2deg); }
-    }
-    @keyframes tagBob2 {
-      0%,100% { transform: translateY(0px) rotate(2deg); }
-      50%      { transform: translateY(-8px) rotate(2deg); }
-    }
-    @keyframes tagBob3 {
-      0%,100% { transform: translateY(0px) rotate(-1deg); }
-      50%      { transform: translateY(-5px) rotate(-1deg); }
-    }
-    @keyframes dotPing {
-      0%     { transform: scale(1); opacity: 0.8; }
-      70%    { transform: scale(2.6); opacity: 0; }
-      100%   { transform: scale(1); opacity: 0; }
-    }
-
-    .hero-img-float  { animation: floatImg 4.5s ease-in-out infinite; }
-    .hero-glow-pulse { animation: pulseGlow 4s ease-in-out infinite; }
-    .ring-spin       { animation: spinRing 20s linear infinite; }
-    .ring-spin-rev   { animation: spinRingRev 28s linear infinite; }
-    .tag-bob-1       { animation: tagBob1 4s ease-in-out infinite; }
-    .tag-bob-2       { animation: tagBob2 5.2s ease-in-out 0.4s infinite; }
-    .tag-bob-3       { animation: tagBob3 3.8s ease-in-out 0.8s infinite; }
-
-    /* ── Floating tag chip ── */
-    .hero-tag {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--text);
-      white-space: nowrap;
-      z-index: 10;
-      pointer-events: none;
-      backdrop-filter: blur(8px);
-    }
-
-    /* ── Corner accents ── */
-    .hero-corner {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-color: var(--orange);
-      border-style: solid;
-      opacity: 0.65;
-      z-index: 3;
-      pointer-events: none;
-    }
-    .hero-corner.tl { top: 0;   left: 0;  border-width: 2px 0 0 2px; }
-    .hero-corner.tr { top: 0;   right: 0; border-width: 2px 2px 0 0; }
-    .hero-corner.bl { bottom: 8%; left: 0;  border-width: 0 0 2px 2px; }
-    .hero-corner.br { bottom: 8%; right: 0; border-width: 0 2px 2px 0; }
-
-    /* ── Orbit ring wrapper ── */
-    .hero-orbit {
-      position: absolute;
-      inset: -10%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* ── Responsive adjustments ── */
-    @media (max-width: 860px) {
-      .pf-container { padding: 0 24px; }
-      .pf-hero-stats { display: none !important; }
-      .pf-hero-scroll { display: none !important; }
-
-      .pf-hero-layout {
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 20px;
-      }
-      .pf-hero-image-wrapper {
-        justify-content: center;
-        width: 100%;
-        margin-left: 0;
-        margin-top: 16px;
-      }
-      .pf-hero-pic {
-        max-width: 320px;
-        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%);
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 100%);
-        -webkit-mask-composite: unset;
-        mask-composite: unset;
-      }
-      .hero-tag { display: none !important; }
-      .hero-orbit { display: none !important; }
-    }
-
-    /* ── Marquee ── */
-    @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .mq-track { display:flex; width:max-content; animation:mq 20s linear infinite; }
-    .mq-track:hover { animation-play-state:paused; }
-
-    /* ── Hero name ── */
-    .pf-name {
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:900; line-height:.88; letter-spacing:-.01em;
-      text-transform:uppercase; color:var(--text);
-      font-size:clamp(72px,13vw,176px);
-    }
-
-    /* ── Mono nav label ── */
-    .pf-nav-lbl {
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700; font-size:11px; letter-spacing:.2em; text-transform:uppercase;
-    }
-
-    /* ── CTA ── */
-    .pf-btn {
-      font-family:'Barlow Condensed',sans-serif;
-      font-weight:700; font-size:12px; letter-spacing:.2em; text-transform:uppercase;
-      display:inline-flex; align-items:center; gap:8px;
-      padding:13px 26px; border:1px solid var(--border);
-      background:transparent; color:var(--text); cursor:pointer; text-decoration:none;
-      transition:background .18s,color .18s,border-color .18s;
-    }
-    .pf-btn:hover { background:var(--orange); color:#fff; border-color:var(--orange); }
-    .pf-btn.primary { background:var(--orange); color:#fff; border-color:var(--orange); }
-    .pf-btn.primary:hover { background:transparent; color:var(--text); border-color:var(--border); }
-
-    /* ── Stack pill ── */
-    .pf-pill {
-      font-family:'Barlow Condensed',sans-serif; font-size:11px;
-      letter-spacing:.1em; text-transform:uppercase;
-      padding:5px 12px; border:1px solid var(--border); color:var(--muted);
-      transition:border-color .2s,color .2s;
-    }
-    .pf-pill:hover { border-color:var(--orange); color:var(--orange); }
-
-    /* ── Blink cursor ── */
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    .blink { animation:blink 1s step-end infinite; }
-
-    /* ── Scroll bob ── */
-    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
-    .bob { animation:bob 2s ease-in-out infinite; }
-
-    /* ── Nav link hover ── */
-    .pf-navlink { color:var(--muted); transition:color .15s; text-decoration:none; }
-    .pf-navlink:hover { color:var(--orange); }
-
-    /* background grid */
-    .pf-grid {
-      position:absolute; inset:0; pointer-events:none;
-      background-image:
-        linear-gradient(var(--border) 1px,transparent 1px),
-        linear-gradient(90deg,var(--border) 1px,transparent 1px);
-      background-size:80px 80px;
+    @media(max-width:840px){
+      .sidebar { display:none!important; }
+      .right-panel { padding:28px 20px 24px!important; }
+      .feat-grid { grid-template-columns:1fr!important; }
+      .contact-2col { grid-template-columns:1fr!important; }
+      .fp-btns { display:none!important; }
     }
   `}</style>
 );
 
-/* ── Top marquee bar ── */
-const TopBar = () => {
-  const words = ["AVAILABLE FOR WORK","MERN STACK","FULL STACK DEV","TEJAS PATIL","REACT · NODE · MONGO","OPEN SOURCE"];
-  const doubled = [...words, ...words];
+/* ══════════════════════════════════════════════
+   CURSOR
+══════════════════════════════════════════════ */
+const CustomCursor = () => {
+  const mx = useMotionValue(-100), my = useMotionValue(-100);
+  const [hov, setHov] = useState(false);
+  const x = useSpring(mx,{damping:28,stiffness:450});
+  const y = useSpring(my,{damping:28,stiffness:450});
+  useEffect(()=>{
+    const move = e=>{ mx.set(e.clientX); my.set(e.clientY); };
+    const over = e=>{ const isInput=["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName); setHov(!isInput&&!!e.target.closest("a,button,[data-cursor]")); };
+    window.addEventListener("mousemove",move);
+    window.addEventListener("mousemove",over);
+    return()=>{ window.removeEventListener("mousemove",move); window.removeEventListener("mousemove",over); };
+  },[mx,my]);
   return (
-    <div style={{ borderBottom:"1px solid var(--border)", overflow:"hidden" }}>
-      <div className="mq-track" style={{ padding:"9px 0" }}>
-        {doubled.map((w,i) => (
-          <React.Fragment key={i}>
-            <span className="pf-nav-lbl" style={{ color:"var(--orange)", whiteSpace:"nowrap", padding:"0 28px" }}>{w}</span>
-            <span style={{ color:"var(--orange)", opacity:.5, fontSize:9 }}>✦</span>
-          </React.Fragment>
+    <motion.div className="pf-cursor" style={{ position:"fixed",top:0,left:0,pointerEvents:"none",zIndex:99999,x,y,translateX:"-50%",translateY:"-50%" }} animate={{ width:hov?36:11,height:hov?36:11 }} transition={{ duration:.16,ease:"easeOut" }}>
+      <div style={{ width:"100%",height:"100%",borderRadius:"50%",background:hov?"transparent":"#F15A24",border:hov?"2px solid #F15A24":"none",transition:"all .16s" }}/>
+    </motion.div>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   FLOATING NAV
+══════════════════════════════════════════════ */
+const FloatingNav = () => {
+  const { isDark, toggle, t, activeTab, setActiveTab } = useTheme();
+  const tabs = [
+    { id:"home",     Icon:Home,     label:"Home" },
+    { id:"projects", Icon:Briefcase,label:"Projects" },
+    { id:"about",    Icon:User,     label:"About" },
+    { id:"tools",    Icon:Code,     label:"Tools" },
+    { id:"contact",  Icon:Mail,     label:"Contact" },
+  ];
+  return (
+    <div style={{ position:"fixed",top:18,left:0,right:0,display:"flex",justifyContent:"center",zIndex:9998,pointerEvents:"none" }}>
+      <motion.nav initial={{ y:-60,opacity:0 }} animate={{ y:0,opacity:1 }} transition={{ delay:.3,duration:.6,ease:[.22,1,.36,1] }}
+        style={{ pointerEvents:"auto",background:t.nav,backdropFilter:"blur(20px)",border:`1px solid ${t.navBorder}`,borderRadius:100,padding:"10px 20px",display:"flex",alignItems:"center",gap:4,boxShadow:`0 8px 28px rgba(0,0,0,${isDark?.35:.1})` }}
+      >
+        {tabs.map(({ id, Icon, label })=>(
+          <button key={id} onClick={()=>setActiveTab(id)} title={label}
+            style={{ position:"relative",background:activeTab===id?"rgba(241,90,36,0.12)":"transparent",border:"none",padding:"7px 10px",borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",color:activeTab===id?"#F15A24":t.arrowColor,transition:"color .2s,background .2s,transform .2s",fontFamily:"'Outfit',sans-serif" }}
+            onMouseEnter={e=>{ if(activeTab!==id){ e.currentTarget.style.color="#F15A24"; e.currentTarget.style.transform="translateY(-2px)"; }}}
+            onMouseLeave={e=>{ if(activeTab!==id){ e.currentTarget.style.color=t.arrowColor; e.currentTarget.style.transform="translateY(0)"; }}}
+          >
+            <Icon size={15} strokeWidth={activeTab===id?2.2:1.7}/>
+            {activeTab===id && (
+              <motion.div layoutId="nav-dot" style={{ position:"absolute",bottom:2,left:"50%",width:3,height:3,borderRadius:"50%",background:"#F15A24",translateX:"-50%" }} transition={{ type:"spring",stiffness:500,damping:30 }}/>
+            )}
+          </button>
         ))}
+        <div style={{ width:1,height:14,background:t.border,margin:"0 4px" }}/>
+        <button onClick={toggle} title={isDark?"Light mode":"Dark mode"}
+          style={{ background:"none",border:"none",color:t.arrowColor,padding:"7px 8px",display:"flex",alignItems:"center",transition:"color .2s,transform .2s",fontFamily:"'Outfit',sans-serif" }}
+          onMouseEnter={e=>{ e.currentTarget.style.color="#F15A24"; e.currentTarget.style.transform="rotate(18deg)"; }}
+          onMouseLeave={e=>{ e.currentTarget.style.color=t.arrowColor; e.currentTarget.style.transform="rotate(0)"; }}
+        >
+          {isDark ? <Sun size={15} strokeWidth={1.7}/> : <Moon size={15} strokeWidth={1.7}/>}
+        </button>
+      </motion.nav>
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   LEFT SIDEBAR
+══════════════════════════════════════════════ */
+const ProfileSidebar = () => {
+  const { isDark, t, setActiveTab } = useTheme();
+  const socials = [
+    { Icon:Github,   href:"https://github.com/Tejascodez",         label:"GitHub" },
+    { Icon:Twitter,  href:"https://twitter.com/tejastp834",        label:"Twitter" },
+    { Icon:Linkedin, href:"https://www.linkedin.com/in/tejasp834", label:"LinkedIn" },
+  ];
+  const profiles = [
+    { Icon:SiLeetcode,      name:"LeetCode",      url:"https://leetcode.com/u/tejastp834/",               color:"#FFA116" },
+    { Icon:SiGeeksforgeeks, name:"GeeksforGeeks", url:"https://www.geeksforgeeks.org/profile/tejast6ngg", color:"#2F8D46" },
+  ];
+  const interests = ["💪 Fitness","🎌 Anime","📚 Learning","💻 Coding"];
+  const stats = [{ num:"10+",label:"Projects" },{ num:"1+",label:"Yrs Exp" },{ num:"∞",label:"Curiosity" }];
+
+  return (
+    <div style={{ height:"100%",overflow:"hidden",display:"flex",flexDirection:"column",padding:"16px 14px",gap:0 }}>
+
+      {/* Portrait — fixed height so it never overflows */}
+      <div style={{ position:"relative",width:"100%",height:160,borderRadius:16,overflow:"hidden",flexShrink:0,background:isDark?"#1a1a1a":"#ddd" }}>
+        <img src={profileImg} alt="Tejas Patil" style={{ width:"100%",height:"100%",objectFit:"cover",objectPosition:"top center",display:"block" }}/>
+        <div style={{ position:"absolute",top:8,right:8,width:24,height:24,borderRadius:"50%",background:"#F15A24",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 3px 8px rgba(241,90,36,0.5)" }}>
+          <Code size={11} color="white" strokeWidth={2.2}/>
+        </div>
+        <div style={{ position:"absolute",bottom:8,left:8,display:"inline-flex",alignItems:"center",gap:4,background:"rgba(13,13,13,0.72)",backdropFilter:"blur(8px)",borderRadius:100,padding:"3px 8px",fontSize:9,color:"#fff",fontWeight:600,border:"1px solid rgba(255,255,255,0.12)" }}>
+          <span style={{ position:"relative",width:5,height:5,display:"inline-flex",flexShrink:0 }}>
+            <span style={{ position:"absolute",inset:0,borderRadius:"50%",background:"#4ade80",opacity:.7,animation:"ping-dot 1.8s ease-out infinite" }}/>
+            <span style={{ position:"absolute",inset:0,borderRadius:"50%",background:"#4ade80" }}/>
+          </span>
+          Available
+        </div>
+      </div>
+
+      {/* Name & role */}
+      <div style={{ padding:"10px 2px 0",flex:1,display:"flex",flexDirection:"column",minHeight:0 }}>
+        <div style={{ fontWeight:800,fontSize:16,letterSpacing:"-.3px",color:t.text,marginBottom:1 }}>Tejas Patil</div>
+        <div style={{ fontSize:10,color:"#F15A24",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:8 }}>Full-Stack Developer</div>
+
+        {/* Stats */}
+        <div style={{ display:"flex",gap:0,marginBottom:10,borderRadius:8,overflow:"hidden",border:`1px solid ${t.border}`,flexShrink:0 }}>
+          {stats.map((s,i)=>(
+            <div key={i} style={{ flex:1,padding:"7px 4px",textAlign:"center",borderRight:i<2?`1px solid ${t.border}`:"none",background:t.card }}>
+              <div style={{ fontWeight:900,fontSize:15,color:"#F15A24",lineHeight:1 }}>{s.num}</div>
+              <div style={{ fontSize:8,color:t.muted,textTransform:"uppercase",letterSpacing:".1em",marginTop:2 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Socials */}
+        <div style={{ display:"flex",gap:5,marginBottom:8,flexShrink:0 }}>
+          {socials.map(({ Icon, href, label },i)=>(
+            <a key={i} href={href} target="_blank" rel="noopener noreferrer" title={label}
+              style={{ flex:1,height:28,borderRadius:8,background:t.card,border:`1px solid ${t.border}`,display:"flex",alignItems:"center",justifyContent:"center",color:t.muted,textDecoration:"none",transition:"all .18s" }}
+              onMouseEnter={e=>{ e.currentTarget.style.background="#F15A24"; e.currentTarget.style.color="#fff"; e.currentTarget.style.borderColor="#F15A24"; e.currentTarget.style.transform="translateY(-2px)"; }}
+              onMouseLeave={e=>{ e.currentTarget.style.background=t.card; e.currentTarget.style.color=t.muted; e.currentTarget.style.borderColor=t.border; e.currentTarget.style.transform="translateY(0)"; }}
+            ><Icon size={12}/></a>
+          ))}
+        </div>
+
+        {/* CTAs */}
+        <div style={{ display:"flex",gap:5,marginBottom:10,flexShrink:0 }}>
+          <a href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=sharing" target="_blank" rel="noopener noreferrer"
+            style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:4,padding:"7px 6px",borderRadius:100,background:"#F15A24",color:"#fff",fontSize:11,fontWeight:700,textDecoration:"none",transition:"opacity .2s" }}
+            onMouseEnter={e=>e.currentTarget.style.opacity=".82"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}
+          >Resume <ArrowUpRight size={11}/></a>
+          <button onClick={()=>setActiveTab("contact")}
+            style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:4,padding:"7px 6px",borderRadius:100,background:t.card,border:`1px solid ${t.border}`,color:t.text,fontSize:11,fontWeight:600,transition:"all .18s",fontFamily:"'Outfit',sans-serif" }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor="#F15A24"; e.currentTarget.style.background="rgba(241,90,36,0.08)"; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor=t.border; e.currentTarget.style.background=t.card; }}
+          >Contact</button>
+        </div>
+
+        <div style={{ height:1,background:t.border,margin:"0 0 10px",flexShrink:0 }}/>
+
+        {/* Interests */}
+        <div style={{ marginBottom:10,flexShrink:0 }}>
+          <div style={{ fontSize:8,color:t.muted,textTransform:"uppercase",letterSpacing:".15em",fontWeight:700,marginBottom:6 }}>Interests</div>
+          <div style={{ display:"flex",flexWrap:"wrap",gap:4 }}>
+            {interests.map((tag,i)=><span key={i} style={{ fontSize:9,color:t.muted,padding:"3px 8px",border:`1px solid ${t.border}`,borderRadius:100,background:t.card }}>{tag}</span>)}
+          </div>
+        </div>
+
+        {/* Coding profiles */}
+        <div style={{ flexShrink:0 }}>
+          <div style={{ fontSize:8,color:t.muted,textTransform:"uppercase",letterSpacing:".15em",fontWeight:700,marginBottom:6 }}>Coding Profiles</div>
+          {profiles.map(({ Icon, name, url, color },i)=>(
+            <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+              style={{ display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:3,borderRadius:8,border:`1px solid ${t.border}`,textDecoration:"none",color:t.muted,fontSize:10,fontWeight:500,transition:"all .18s",background:t.card }}
+              onMouseEnter={e=>{ e.currentTarget.style.borderColor=color; e.currentTarget.style.color=color; e.currentTarget.style.background=color+"12"; }}
+              onMouseLeave={e=>{ e.currentTarget.style.borderColor=t.border; e.currentTarget.style.color=t.muted; e.currentTarget.style.background=t.card; }}
+            >
+              <Icon size={12} style={{ color,flexShrink:0 }}/>{name}<ArrowUpRight size={9} style={{ marginLeft:"auto" }}/>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-/* ── Navbar ── */
-const Navbar = ({ isDark, toggleDark, mobileOpen, setMobileOpen }) => {
-  const navItems = [
-    { label:"Home", href:"#home" },
-    { label:"Projects", href:"#projects" },
-    { label:"About", href:"#about" },
-  ];
-  const socials = [
-    { Icon: Github, href:"https://github.com/Tejascodez" },
-    { Icon: Twitter, href:"https://twitter.com/tejastp834" },
-    { Icon: Linkedin, href:"https://www.linkedin.com/in/tejasp834" },
-  ];
-  return (
-    <nav style={{
-      position:"sticky", top:0, zIndex:50,
-      borderBottom:"1px solid var(--border)",
-      background:"var(--bg)",
-    }}>
-      <div className="pf-container" style={{
-        display:"flex", alignItems:"center", justifyContent:"space-between", height:54
-      }}>
-        <a href="#home" style={{ textDecoration:"none" }}>
-          <span style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:22, letterSpacing:".05em", textTransform:"uppercase", color:"var(--text)" }}>
-            TP<span style={{ color:"var(--orange)" }}>.</span>
-          </span>
-        </a>
-
-        {/* desktop links */}
-        <div style={{ display:"flex", gap:28 }} className="pf-desktop">
-          {navItems.map((n,i) => (
-            <a key={i} href={n.href} className="pf-navlink pf-nav-lbl">{n.label}</a>
-          ))}
-        </div>
-
-        <div style={{ display:"flex", alignItems:"center", gap:18 }}>
-          <div style={{ display:"flex", gap:16 }} className="pf-desktop">
-            {socials.map(({Icon,href},i) => (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                className="pf-navlink" style={{ display:"flex" }}>
-                <Icon size={15} />
-              </a>
-            ))}
-          </div>
-          <div style={{ width:1, height:16, background:"var(--border)" }} className="pf-desktop" />
-          <button onClick={toggleDark} style={{ background:"none",border:"none",cursor:"pointer",color:"var(--muted)",display:"flex",padding:0 }}>
-            {isDark
-              ? <SunIcon style={{ width:16,height:16,color:"#FFCC00" }} />
-              : <MoonIcon style={{ width:16,height:16 }} />}
-          </button>
-          <button onClick={() => setMobileOpen(o => !o)} style={{ background:"none",border:"none",cursor:"pointer",color:"var(--text)",display:"none",padding:0 }} className="pf-mobile-btn">
-            {mobileOpen ? <X size={17} /> : <Menu size={17} />}
-          </button>
-        </div>
-      </div>
-
-      <style>{`
-        @media(max-width:768px){
-          .pf-desktop{display:none!important}
-          .pf-mobile-btn{display:flex!important}
-        }
-      `}</style>
-    </nav>
-  );
-};
-
-/* ── Mobile drawer ── */
-const MobileDrawer = ({ isOpen, setOpen }) => {
-  const items = [
-    { label:"Home", href:"#home" },
-    { label:"Projects", href:"#projects" },
-    { label:"About", href:"#about" },
-    { label:"GitHub", href:"https://github.com/Tejascodez" },
-    { label:"Twitter", href:"https://twitter.com/tejastp834" },
-    { label:"LinkedIn", href:"https://www.linkedin.com/in/tejasp834" },
-  ];
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div initial={{ opacity:0,y:-6 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-6 }}
-          style={{
-            position:"fixed", top:108, left:0, right:0, zIndex:49,
-            background:"var(--bg)", borderBottom:"1px solid var(--border)",
-            padding:"16px 32px 28px"
-          }}>
-          {items.map((item,i) => (
-            <a key={i} href={item.href}
-              target={item.href.startsWith("http") ? "_blank" : undefined}
-              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              onClick={() => setOpen(false)}
-              style={{
-                display:"block", padding:"13px 0", borderBottom:"1px solid var(--border)",
-                textDecoration:"none", fontFamily:"'Barlow Condensed',sans-serif",
-                fontWeight:900, fontSize:32, letterSpacing:".02em", textTransform:"uppercase",
-                color:"var(--text)", transition:"color .15s"
-              }}
-              onMouseEnter={e => e.currentTarget.style.color = "var(--orange)"}
-              onMouseLeave={e => e.currentTarget.style.color = "var(--text)"}
-            >{item.label}</a>
-          ))}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
-
-/* ── Ping dot component ── */
-const PingDot = () => (
-  <span style={{ position:"relative", width:8, height:8, flexShrink:0 }}>
-    <span style={{
-      position:"absolute", inset:0, borderRadius:"50%",
-      background:"var(--orange)", opacity:0.75,
-      animation:"dotPing 1.8s ease-out infinite",
-    }} />
-    <span style={{
-      position:"absolute", inset:0, borderRadius:"50%",
-      background:"var(--orange)",
-    }} />
-    <style>{`
-      @keyframes dotPing {
-        0%   { transform:scale(1); opacity:0.8; }
-        70%  { transform:scale(2.6); opacity:0; }
-        100% { transform:scale(1); opacity:0; }
-      }
-    `}</style>
-  </span>
+/* ══════════════════════════════════════════════
+   SHARED TAB HELPERS
+══════════════════════════════════════════════ */
+const TabWrap = ({ children }) => (
+  <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-10 }}
+    transition={{ duration:.3,ease:[.22,1,.36,1] }} style={{ paddingBottom:8 }}>
+    {children}
+  </motion.div>
 );
 
-/* ── Hero section ── */
-const Hero = () => {
-  const [typed, setTyped] = useState('');
-  const intro = "Software Developer . Backend Developer . Full - Stack Developer";
-  useEffect(() => {
-    let i = 0; setTyped('');
-    const id = setInterval(() => {
-      i++; setTyped(intro.slice(0, i));
-      if (i >= intro.length) clearInterval(id);
-    }, 52);
-    return () => clearInterval(id);
-  }, []);
+const EyeBrow = ({ text, color="#F15A24" }) => (
+  <div style={{ fontSize:10,color,fontWeight:700,textTransform:"uppercase",letterSpacing:".18em",marginBottom:12 }}>{text}</div>
+);
 
+const SplitHeading = ({ line1, line2 }) => {
+  const { t } = useTheme();
+  const s = { fontFamily:"'Outfit',sans-serif",fontWeight:900,fontSize:"clamp(32px,3.8vw,58px)",lineHeight:.9,letterSpacing:"-.03em",textTransform:"uppercase",display:"block" };
   return (
-    <section id="home" style={{
-      position:"relative", height:"calc(100vh - 108px)",
-      overflow:"hidden", width:"100%"
-    }}>
-      {/* subtle grid */}
-      <div className="pf-grid" />
-
-      <div className="pf-container" style={{
-        height:"100%", display:"flex", flexDirection:"column",
-        justifyContent:"center", paddingBottom:56
-      }}>
-
-        {/* stats top-right */}
-        <div className="pf-hero-stats" style={{
-          position:"absolute", right:32, top:36, zIndex:3,
-          display:"flex", flexDirection:"column", gap:3, textAlign:"right"
-        }}>
-          {["10+ Projects Shipped","Looking for SDE roles","Open to Freelance"].map((s,i) => (
-            <span key={i} style={{
-              fontFamily:"'Barlow Condensed',sans-serif", fontWeight:400,
-              fontSize:13, letterSpacing:".04em", color:"var(--muted)"
-            }}>{s}</span>
-          ))}
-        </div>
-
-        {/* ── Split Layout ── */}
-        <div className="pf-hero-layout">
-
-          {/* LEFT: Text */}
-          <div className="pf-hero-text">
-            <motion.div initial={{ opacity:0,y:44 }} animate={{ opacity:1,y:0 }} transition={{ duration:.75, ease:[.22,1,.36,1] }}>
-              <div className="pf-name">Tejas</div>
-              <div className="pf-name">Patil<span style={{ color:"var(--orange)" }}>.</span></div>
-            </motion.div>
-
-            <motion.div initial={{ scaleX:0 }} animate={{ scaleX:1 }} transition={{ delay:.4,duration:.65 }}
-              style={{ transformOrigin:"left", height:1, background:"var(--border)", margin:"30px 0 24px", maxWidth:660 }} />
-
-            <motion.div initial={{ opacity:0,y:10 }} animate={{ opacity:1,y:0 }} transition={{ delay:.55,duration:.5 }}
-              style={{ display:"flex", flexWrap:"wrap", alignItems:"center", gap:24 }}>
-              <p style={{
-                fontFamily:"'Barlow Condensed',sans-serif", fontWeight:400,
-                fontSize:17, letterSpacing:".04em", color:"var(--muted)", maxWidth:440
-              }}>
-                {typed}
-                <span className="blink" style={{ display:"inline-block",width:2,height:14,background:"var(--orange)",marginLeft:3,verticalAlign:"middle" }} />
-              </p>
-              <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-                <a href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=sharing"
-                  target="_blank" rel="noopener noreferrer" className="pf-btn primary">
-                  View Resume <ArrowUpRight size={13} />
-                </a>
-                <a href="mailto:tejastp834@gmail.com" className="pf-btn">
-                  Let's Connect
-                </a>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:.75 }}
-              style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:26 }}>
-              {["React","Node.js","MongoDB","Express","TypeScript","Next.js"].map((t,i) => (
-                <span key={i} className="pf-pill">{t}</span>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* RIGHT: Enhanced Profile Image */}
-          <motion.div
-            className="pf-hero-image-wrapper"
-            initial={{ opacity:0, x:40 }}
-            animate={{ opacity:1, x:0 }}
-            transition={{ duration:0.8, delay:0.3, ease:[0.22,1,0.36,1] }}
-            style={{ position:"relative" }}
-          >
-            {/* ── Orange glow blob behind photo ── */}
-            <div
-              className="hero-glow-pulse"
-              style={{
-                position:"absolute",
-                bottom:"5%",
-                left:"50%",
-                transform:"translateX(-50%)",
-                width:"72%",
-                height:"52%",
-                borderRadius:"50%",
-                background:"radial-gradient(ellipse, rgba(241,90,36,0.22) 0%, transparent 70%)",
-                filter:"blur(32px)",
-                pointerEvents:"none",
-                zIndex:0,
-              }}
-            />
-
-            {/* ── Outer orbit ring ── */}
-            <div className="hero-orbit ring-spin" style={{ opacity:0.22 }}>
-              <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"
-                style={{ width:"100%", height:"100%" }}>
-                <ellipse cx="200" cy="200" rx="188" ry="188"
-                  stroke="#F15A24" strokeWidth="0.8" strokeDasharray="6 14" />
-                <circle cx="200" cy="12" r="4.5" fill="#F15A24" opacity="0.9" />
-                <circle cx="388" cy="200" r="3" fill="#F15A24" opacity="0.5" />
-                <circle cx="200" cy="388" r="2.5" fill="#F15A24" opacity="0.35" />
-              </svg>
-            </div>
-
-            {/* ── Inner orbit ring (reverse) ── */}
-            <div className="hero-orbit ring-spin-rev" style={{ inset:"6%", opacity:0.13 }}>
-              <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"
-                style={{ width:"100%", height:"100%" }}>
-                <ellipse cx="200" cy="200" rx="176" ry="176"
-                  stroke="#F15A24" strokeWidth="0.5" strokeDasharray="3 22" />
-              </svg>
-            </div>
-
-            {/* ── Floating image with corner accents ── */}
-            <div className="hero-img-float" style={{ position:"relative", zIndex:2 }}>
-              <div className="hero-corner tl" />
-              <div className="hero-corner tr" />
-              <div className="hero-corner bl" />
-              <div className="hero-corner br" />
-              <img src={profile} alt="Tejas Patil" className="pf-hero-pic" />
-            </div>
-
-            {/* ── Floating Tag 1: Available for Work ── */}
-            <motion.div
-              className="hero-tag tag-bob-1"
-              initial={{ opacity:0, x:-20 }}
-              animate={{ opacity:1, x:0 }}
-              transition={{ delay:1.0, duration:0.6, ease:[0.22,1,0.36,1] }}
-              style={{ top:"14%", left:"-5%" }}
-            >
-              <PingDot />
-              Available for Work
-            </motion.div>
-
-            {/* ── Floating Tag 2: Stack pills ── */}
-            <motion.div
-              className="hero-tag tag-bob-2"
-              initial={{ opacity:0, x:-20 }}
-              animate={{ opacity:1, x:0 }}
-              transition={{ delay:1.2, duration:0.6, ease:[0.22,1,0.36,1] }}
-              style={{
-                bottom:"28%", left:"-8%",
-                flexDirection:"column", alignItems:"flex-start", gap:6,
-                padding:"10px 14px",
-              }}
-            >
-              <span style={{
-                fontFamily:"'Barlow Condensed',sans-serif",
-                fontSize:9, letterSpacing:".2em", color:"var(--muted)", fontWeight:700
-              }}>STACK</span>
-              <div style={{ display:"flex", gap:6 }}>
-                {["JAVA","MERN","AWS"].map((s,i) => (
-                  <span key={i} style={{
-                    padding:"3px 8px",
-                    border:"1px solid rgba(241,90,36,0.4)",
-                    color:"var(--orange)",
-                    fontSize:10,
-                    fontFamily:"'Barlow Condensed',sans-serif",
-                    fontWeight:700,
-                    letterSpacing:".1em",
-                    textTransform:"uppercase",
-                  }}>{s}</span>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* ── Floating Tag 3: Projects count ── */}
-            <motion.div
-              className="hero-tag tag-bob-3"
-              initial={{ opacity:0, x:20 }}
-              animate={{ opacity:1, x:0 }}
-              transition={{ delay:1.4, duration:0.6, ease:[0.22,1,0.36,1] }}
-              style={{
-                top:"22%", right:"-4%",
-                flexDirection:"column", alignItems:"flex-start", gap:2,
-                padding:"10px 16px",
-              }}
-            >
-              <span style={{
-                fontFamily:"'Barlow Condensed',sans-serif",
-                fontWeight:900, fontSize:30, lineHeight:1, color:"var(--orange)",
-              }}>
-                10<span style={{ fontSize:18 }}>+</span>
-              </span>
-              <span style={{
-                fontFamily:"'Barlow Condensed',sans-serif",
-                fontSize:9, letterSpacing:".15em", color:"var(--muted)", fontWeight:700
-              }}>PROJECTS SHIPPED</span>
-            </motion.div>
-
-          </motion.div>
-          {/* end RIGHT */}
-
-        </div>
-
-        {/* scroll indicator */}
-        <div className="bob pf-hero-scroll" style={{
-          position:"absolute", bottom:24, right:32, zIndex:3,
-          display:"flex", flexDirection:"column", alignItems:"center", gap:8
-        }}>
-          <span style={{
-            fontFamily:"'Barlow Condensed',sans-serif", fontSize:10,
-            letterSpacing:".22em", textTransform:"uppercase", color:"var(--muted)",
-            writingMode:"vertical-rl"
-          }}>Scroll</span>
-          <div style={{ width:1, height:36, background:"var(--border)" }} />
-          <div style={{ width:6, height:6, borderRadius:"50%", background:"var(--orange)" }} />
-        </div>
-
-      </div>
-    </section>
+    <div style={{ marginBottom:28 }}>
+      <span style={{ ...s,color:t.text }}>{line1}</span>
+      <span style={{ ...s,color:"transparent",WebkitTextStroke:`1.5px ${t.text}`,opacity:.13 }}>{line2}</span>
+    </div>
   );
 };
 
-/* ── Root ── */
-const PortfolioLanding = () => {
-  const [isDark, setIsDark] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const pref = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDark(pref);
-    document.documentElement.classList.toggle('dark', pref);
-  }, []);
-
-  const toggleDark = () => {
-    setIsDark(prev => {
-      document.documentElement.classList.toggle('dark', !prev);
-      return !prev;
-    });
+const ArrowLink = ({ href, onClick, size=36 }) => {
+  const { t } = useTheme();
+  const shared = {
+    width:size,height:size,borderRadius:"50%",border:`1px solid ${t.arrowBorder}`,
+    display:"flex",alignItems:"center",justifyContent:"center",color:t.arrowColor,
+    flexShrink:0,transition:"border-color .18s,color .18s,transform .18s",
   };
+  const hover = e=>{ e.currentTarget.style.borderColor="#F15A24"; e.currentTarget.style.color="#F15A24"; e.currentTarget.style.transform="translate(3px,-3px)"; };
+  const leave = e=>{ e.currentTarget.style.borderColor=t.arrowBorder; e.currentTarget.style.color=t.arrowColor; e.currentTarget.style.transform="translate(0,0)"; };
+  return href
+    ? <a href={href} target="_blank" rel="noopener noreferrer" style={{ ...shared,textDecoration:"none" }} onMouseEnter={hover} onMouseLeave={leave}><ArrowUpRight size={13}/></a>
+    : <button onClick={onClick} style={{ ...shared,background:"none",fontFamily:"'Outfit',sans-serif" }} onMouseEnter={hover} onMouseLeave={leave}><ArrowUpRight size={13}/></button>;
+};
 
+/* ══════════════════════════════════════════════
+   HOME TAB
+══════════════════════════════════════════════ */
+const HomeTab = () => {
+  const { t, setActiveTab } = useTheme();
   return (
-    <div className={`pf-wrap ${isDark ? 'pf-dark' : 'pf-light'}`}>
-      <GlobalStyles />
-      <TopBar />
-      <Navbar isDark={isDark} toggleDark={toggleDark} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-      <MobileDrawer isOpen={mobileOpen} setOpen={setMobileOpen} />
-      <Hero />
+    <TabWrap>
+      <EyeBrow text="Portfolio · 2025"/>
+      <SplitHeading line1="Software" line2="Developer"/>
+      <p style={{ fontSize:13,color:t.muted,lineHeight:1.78,maxWidth:520,marginBottom:28 }}>
+        Passionate about building modern, scalable applications with clean architecture and impactful user experiences.
+        Joining <span style={{ color:"#F15A24",fontWeight:600 }}>Cognizant</span> as Programmer Analyst Trainee.
+      </p>
 
-      <div className="pf-container">
-        <div style={{ height:1, background:"var(--border)", width:"100%" }} />
+      {/* Feature cards */}
+      <div className="feat-grid" style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:32 }}>
+        {[
+          { bg:"#F15A24", emoji:"🚀", title:"Available for Work",   desc:"Open to SDE-1 roles, full-stack projects, and freelance opportunities.", href:"mailto:tejastp834@gmail.com", dark:true },
+          { bg:"#CCFF00", emoji:"⚡", title:"10+ Projects Shipped", desc:"From AI platforms to logistics — building production-grade applications.",  href:null, dark:false, onClick:()=>setActiveTab("projects") },
+        ].map((card,i)=>(
+          <motion.div key={i} whileHover={{ y:-4 }} style={{ background:card.bg,borderRadius:18,padding:"22px 22px 56px",position:"relative",overflow:"hidden",cursor:"default" }}>
+            <div style={{ position:"absolute",right:-12,bottom:-12,width:120,height:120,borderRadius:"50%",border:`1.5px solid ${card.dark?"rgba(255,255,255,0.15)":"rgba(0,0,0,0.1)"}`,pointerEvents:"none" }}/>
+            <div style={{ position:"absolute",right:20,bottom:-20,width:80,height:80,borderRadius:"50%",border:`1.5px solid ${card.dark?"rgba(255,255,255,0.08)":"rgba(0,0,0,0.07)"}`,pointerEvents:"none" }}/>
+            <div style={{ fontSize:22,marginBottom:9 }}>{card.emoji}</div>
+            <div style={{ fontSize:15,fontWeight:800,color:card.dark?"#fff":"#0d0d0d",marginBottom:5,letterSpacing:"-.2px" }}>{card.title}</div>
+            <div style={{ fontSize:12,color:card.dark?"rgba(255,255,255,0.8)":"rgba(13,13,13,0.68)",lineHeight:1.58 }}>{card.desc}</div>
+            <a href={card.href||"#"} onClick={card.onClick?e=>{e.preventDefault();card.onClick();}:undefined}
+              style={{ position:"absolute",bottom:16,right:16,width:34,height:34,borderRadius:"50%",background:card.dark?"rgba(255,255,255,0.2)":"rgba(0,0,0,0.12)",display:"flex",alignItems:"center",justifyContent:"center",color:card.dark?"#fff":"#0d0d0d",textDecoration:"none",transition:"transform .18s" }}
+              onMouseEnter={e=>e.currentTarget.style.transform="translate(3px,-3px)"} onMouseLeave={e=>e.currentTarget.style.transform="translate(0,0)"}
+            ><ArrowUpRight size={14}/></a>
+          </motion.div>
+        ))}
       </div>
 
-      <div style={{ position:"relative", zIndex:1 }}>
-        <AboutMe />
-        <Projects />
+      {/* Dev thoughts */}
+      <EyeBrow text="Latest Writing" color={t.muted}/>
+      <div>
+        {thoughtsData.map((post,i)=>(
+          <motion.div key={i} initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} transition={{ delay:.08+i*.07 }}
+            style={{ display:"flex",justifyContent:"space-between",alignItems:"center",gap:16,padding:"13px 10px",borderBottom:`1px solid ${t.border}`,borderRadius:8,transition:"background .18s" }}
+            onMouseEnter={e=>e.currentTarget.style.background=t.hoverRow} onMouseLeave={e=>e.currentTarget.style.background="transparent"}
+          >
+            <div style={{ flex:1,minWidth:0 }}>
+              <div style={{ fontWeight:600,fontSize:13,color:t.text,marginBottom:3 }}>{post.title}</div>
+              <div style={{ fontSize:11,color:t.muted }}>{post.date} · {post.readTime}</div>
+            </div>
+            <ArrowLink href="#"/>
+          </motion.div>
+        ))}
+      </div>
+    </TabWrap>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   PROJECTS TAB
+══════════════════════════════════════════════ */
+const ProjectsTab = () => {
+  const { t } = useTheme();
+  return (
+    <TabWrap>
+      <EyeBrow text="Selected Work"/>
+      <SplitHeading line1="Recent" line2="Projects"/>
+      <div>
+        {projectsData.map((p,i)=>(
+          <motion.div key={p.id} initial={{ opacity:0,y:18 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*.06 }}
+            style={{ display:"grid",gridTemplateColumns:"76px 1fr auto",gap:16,alignItems:"center",padding:"14px 10px",borderBottom:`1px solid ${t.border}`,borderRadius:8,transition:"background .18s" }}
+            onMouseEnter={e=>e.currentTarget.style.background=t.hoverRow} onMouseLeave={e=>e.currentTarget.style.background="transparent"}
+          >
+            <div style={{ width:76,height:52,borderRadius:9,overflow:"hidden",flexShrink:0,background:t.bg2 }}>
+              <img src={p.thumb} alt={p.title} style={{ width:"100%",height:"100%",objectFit:"cover" }}/>
+            </div>
+            <div>
+              <div style={{ fontWeight:700,fontSize:14,color:t.text,marginBottom:3 }}>{p.title}</div>
+              <div style={{ fontSize:11,color:t.muted,lineHeight:1.5,marginBottom:7 }}>{p.desc}</div>
+              <div style={{ display:"flex",gap:4,flexWrap:"wrap" }}>
+                {p.tags.map((tag,j)=><span key={j} className="tag">{tag}</span>)}
+              </div>
+            </div>
+            <ArrowLink href={p.demo||p.github}/>
+          </motion.div>
+        ))}
+      </div>
+    </TabWrap>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   ABOUT TAB
+══════════════════════════════════════════════ */
+const AboutTab = () => {
+  const { t } = useTheme();
+  return (
+    <TabWrap>
+      <EyeBrow text="Work History"/>
+      <SplitHeading line1="Experience" line2="&amp; Career"/>
+      <div>
+        {experienceData.map((exp,i)=>(
+          <motion.div key={i} initial={{ opacity:0,y:22 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*.1 }}
+            style={{ padding:"24px 0",borderBottom:`1px solid ${t.border}` }}
+          >
+            <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20 }}>
+              <div style={{ flex:1,minWidth:0 }}>
+                <div style={{ display:"inline-flex",alignItems:"center",gap:6,fontSize:10,color:"#F15A24",textTransform:"uppercase",letterSpacing:".12em",marginBottom:8,fontWeight:700 }}>
+                  {exp.current && <span style={{ width:5,height:5,borderRadius:"50%",background:"#F15A24",flexShrink:0 }}/>}
+                  {exp.date}
+                  {exp.current && <span style={{ background:"rgba(241,90,36,0.1)",border:"1px solid rgba(241,90,36,0.28)",padding:"2px 7px",borderRadius:100,fontSize:9 }}>Current</span>}
+                </div>
+                <div style={{ fontWeight:800,fontSize:18,color:t.text,marginBottom:3,letterSpacing:"-.3px" }}>{exp.company}</div>
+                <div style={{ fontSize:11,color:"#F15A24",textTransform:"uppercase",letterSpacing:".1em",marginBottom:10,fontWeight:600 }}>{exp.role}</div>
+                <p style={{ fontSize:12,color:t.muted,lineHeight:1.72,marginBottom:12 }}>{exp.desc}</p>
+                <div style={{ display:"flex",gap:5,flexWrap:"wrap" }}>
+                  {exp.tags.map((tag,j)=><span key={j} className="tag">{tag}</span>)}
+                </div>
+              </div>
+              <ArrowLink href={null} onClick={null}/>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </TabWrap>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   TOOLS TAB
+══════════════════════════════════════════════ */
+const ToolsTab = () => {
+  const { t } = useTheme();
+  return (
+    <TabWrap>
+      <EyeBrow text="Stack &amp; Tooling" color="#CCFF00"/>
+      <SplitHeading line1="Premium" line2="Tools"/>
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:12 }}>
+        {toolsData.map((tool,i)=>(
+          <motion.div key={i} initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*.035 }} whileHover={{ y:-4 }}
+            style={{ display:"flex",alignItems:"center",gap:14,padding:"16px 18px",background:t.card,border:`1px solid ${t.border}`,borderRadius:14,transition:"border-color .18s,background .18s" }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor=tool.color+"66"; e.currentTarget.style.background=tool.color+"10"; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor=t.border; e.currentTarget.style.background=t.card; }}
+          >
+            <div style={{ width:42,height:42,borderRadius:10,background:t.border,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,color:tool.color }}>{tool.icon}</div>
+            <span style={{ fontSize:14,color:t.text,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>{tool.name}</span>
+          </motion.div>
+        ))}
+      </div>
+    </TabWrap>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   CONTACT TAB
+══════════════════════════════════════════════ */
+const ContactTab = () => {
+  const { t } = useTheme();
+  const [form, setForm] = useState({ name:"",email:"",subject:"",message:"" });
+  const inp = { width:"100%",padding:"12px 14px",background:t.input,border:`1px solid ${t.inputBorder}`,borderRadius:10,color:t.text,fontSize:12,outline:"none",fontFamily:"'Outfit',sans-serif",transition:"border-color .18s" };
+  const onFocus = e=>e.target.style.borderColor="rgba(241,90,36,0.5)";
+  const onBlur  = e=>e.target.style.borderColor=t.inputBorder;
+  return (
+    <TabWrap>
+      <EyeBrow text="Get In Touch"/>
+      <SplitHeading line1="Let's Work" line2="Together"/>
+      <div style={{ background:t.formBg,border:`1px solid ${t.formBorder}`,borderRadius:18,padding:"28px" }}>
+        <div className="contact-2col" style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12 }}>
+          {[["name","Name","Your name","text"],["email","Email","your@email.com","email"]].map(([f,label,ph,type])=>(
+            <div key={f}>
+              <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>{label}</label>
+              <input type={type} placeholder={ph} style={inp} value={form[f]} onChange={e=>setForm(p=>({...p,[f]:e.target.value}))} onFocus={onFocus} onBlur={onBlur}/>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginBottom:12 }}>
+          <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>Project Type</label>
+          <select style={{ ...inp,color:form.subject?t.text:t.muted }} value={form.subject} onChange={e=>setForm(p=>({...p,subject:e.target.value}))} onFocus={onFocus} onBlur={onBlur}>
+            <option value="" style={{ background:"#141414" }}>Select a type</option>
+            <option value="web" style={{ background:"#141414" }}>Web Development</option>
+            <option value="fullstack" style={{ background:"#141414" }}>Full Stack Application</option>
+            <option value="freelance" style={{ background:"#141414" }}>Freelance Project</option>
+            <option value="other" style={{ background:"#141414" }}>Other</option>
+          </select>
+        </div>
+        <div style={{ marginBottom:18 }}>
+          <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>Message</label>
+          <textarea placeholder="Tell me about your project..." rows={4} style={{ ...inp,resize:"vertical" }} value={form.message} onChange={e=>setForm(p=>({...p,message:e.target.value}))} onFocus={onFocus} onBlur={onBlur}/>
+        </div>
+        <motion.button type="button" whileHover={{ opacity:.85 }} whileTap={{ scale:.97 }}
+          style={{ width:"100%",padding:"13px",background:"#F15A24",color:"#fff",border:"none",borderRadius:12,fontSize:13,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:7,fontFamily:"'Outfit',sans-serif",boxShadow:"0 6px 18px rgba(241,90,36,0.28)" }}
+        >Send Message <ArrowUpRight size={15}/></motion.button>
+      </div>
+
+      {/* Quick links */}
+      <div style={{ display:"flex",gap:10,marginTop:18,flexWrap:"wrap" }}>
+        {[
+          { label:"Email me",  href:"mailto:tejastp834@gmail.com",              color:"#F15A24" },
+          { label:"LinkedIn",  href:"https://www.linkedin.com/in/tejasp834",    color:"#0077B5" },
+          { label:"GitHub",    href:"https://github.com/Tejascodez",            color:"#CCFF00" },
+        ].map((l,i)=>(
+          <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
+            style={{ display:"inline-flex",alignItems:"center",gap:5,padding:"7px 14px",borderRadius:100,border:`1px solid ${l.color}44`,color:l.color,fontSize:11,fontWeight:600,textDecoration:"none",background:`${l.color}0d`,transition:"background .18s" }}
+            onMouseEnter={e=>e.currentTarget.style.background=`${l.color}1f`} onMouseLeave={e=>e.currentTarget.style.background=`${l.color}0d`}
+          >{l.label} <ArrowUpRight size={10}/></a>
+        ))}
+      </div>
+    </TabWrap>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   FLOATING CORNER BUTTONS
+══════════════════════════════════════════════ */
+const FloatingButtons = () => {
+  const { setActiveTab } = useTheme();
+  return (
+    <>
+      <motion.div className="fp-btns" initial={{ opacity:0,x:-16 }} animate={{ opacity:1,x:0 }} transition={{ delay:1.1 }} style={{ position:"fixed",bottom:20,left:20,zIndex:900 }}>
+        <button onClick={()=>setActiveTab("projects")}
+          style={{ display:"inline-flex",alignItems:"center",gap:6,padding:"8px 14px",borderRadius:100,background:"rgba(241,90,36,0.1)",border:"1px solid rgba(241,90,36,0.3)",color:"#F15A24",fontSize:11,fontWeight:600,backdropFilter:"blur(10px)",fontFamily:"'Outfit',sans-serif",transition:"background .18s" }}
+          onMouseEnter={e=>e.currentTarget.style.background="rgba(241,90,36,0.2)"} onMouseLeave={e=>e.currentTarget.style.background="rgba(241,90,36,0.1)"}
+        ><Play size={9} fill="currentColor"/> Projects</button>
+      </motion.div>
+      <motion.div className="fp-btns" initial={{ opacity:0,x:16 }} animate={{ opacity:1,x:0 }} transition={{ delay:1.1 }} style={{ position:"fixed",bottom:20,right:20,zIndex:900,display:"flex",flexDirection:"column",gap:6 }}>
+        <a href="https://drive.google.com/file/d/1QMv9QgcMzWEvL8Up_4RG8PH811d20p3X/view?usp=sharing" target="_blank" rel="noopener noreferrer"
+          style={{ display:"inline-flex",alignItems:"center",gap:5,padding:"8px 14px",borderRadius:100,background:"#F15A24",color:"#fff",fontSize:11,fontWeight:600,textDecoration:"none",boxShadow:"0 4px 12px rgba(241,90,36,0.32)",transition:"opacity .18s,transform .18s" }}
+          onMouseEnter={e=>{ e.currentTarget.style.opacity=".82"; e.currentTarget.style.transform="translateY(-2px)"; }} onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform="translateY(0)"; }}
+        >Resume <ArrowUpRight size={10}/></a>
+        <a href="mailto:tejastp834@gmail.com"
+          style={{ display:"inline-flex",alignItems:"center",gap:5,padding:"8px 14px",borderRadius:100,background:"#CCFF00",color:"#0d0d0d",fontSize:11,fontWeight:700,textDecoration:"none",boxShadow:"0 4px 12px rgba(204,255,0,0.2)",transition:"opacity .18s,transform .18s" }}
+          onMouseEnter={e=>{ e.currentTarget.style.opacity=".82"; e.currentTarget.style.transform="translateY(-2px)"; }} onMouseLeave={e=>{ e.currentTarget.style.opacity="1"; e.currentTarget.style.transform="translateY(0)"; }}
+        >Hire Me <ArrowUpRight size={10}/></a>
+      </motion.div>
+    </>
+  );
+};
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+const Footer = () => {
+  const { t } = useTheme();
+  return (
+    <div style={{ flexShrink:0,borderTop:`1px solid ${t.border}`,padding:"8px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:8 }}>
+      <div style={{ fontSize:10,color:t.muted }}>© 2025 <span style={{ color:"#F15A24",fontWeight:600 }}>Tejas Patil</span> · Built with React &amp; Framer Motion</div>
+      <div style={{ display:"flex",gap:12,fontSize:10 }}>
+        <a href="https://github.com/Tejascodez" target="_blank" rel="noopener noreferrer" style={{ color:"#CCFF00",textDecoration:"none",fontWeight:600 }}>GitHub</a>
+        <a href="https://www.linkedin.com/in/tejasp834" target="_blank" rel="noopener noreferrer" style={{ color:"#F15A24",textDecoration:"none",fontWeight:600 }}>LinkedIn</a>
       </div>
     </div>
   );
 };
 
-export default PortfolioLanding;
+/* ══════════════════════════════════════════════
+   ROOT
+══════════════════════════════════════════════ */
+const TABS = {
+  home:     <HomeTab/>,
+  projects: <ProjectsTab/>,
+  about:    <AboutTab/>,
+  tools:    <ToolsTab/>,
+  contact:  <ContactTab/>,
+};
+
+export default function PortfolioLanding() {
+  const [isDark, setIsDark] = useState(true);
+  const [activeTab, setActiveTab] = useState("home");
+  const t = isDark ? DARK : LIGHT;
+
+  useEffect(()=>{
+    setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  },[]);
+
+  return (
+    <ThemeCtx.Provider value={{ isDark, toggle:()=>setIsDark(d=>!d), t, activeTab, setActiveTab }}>
+      <div className="pf-wrap">
+        <GlobalStyles isDark={isDark}/>
+        <CustomCursor/>
+        <FloatingNav/>
+
+        {/* ── Two-column layout (below fixed nav) ── */}
+        <div style={{ display:"flex",flex:1,height:"calc(100vh - 62px)",marginTop:62,overflow:"hidden",padding:"0 28px 20px" }}>
+
+          {/* LEFT SIDEBAR */}
+          <aside className="sidebar" style={{ width:260,flexShrink:0,height:"100%",border:`1px solid ${t.border}`,borderRadius:16,background:t.sidebarBg,transition:"background .3s,border-color .3s",overflow:"hidden",marginRight:12 }}>
+            <ProfileSidebar/>
+          </aside>
+
+          {/* RIGHT PANEL */}
+          <div style={{ flex:1,height:"100%",display:"flex",flexDirection:"column",overflow:"hidden",border:`1px solid ${t.border}`,borderRadius:16 }}>
+            <div className="right-panel" style={{ flex:1,overflowY:"auto",padding:"40px 48px" }}>
+              <AnimatePresence mode="wait">
+                <motion.div key={activeTab} initial={{ opacity:0,y:14 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-8 }} transition={{ duration:.28,ease:[.22,1,.36,1] }}>
+                  {TABS[activeTab]}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            <Footer/>
+          </div>
+        </div>
+
+        <FloatingButtons/>
+      </div>
+    </ThemeCtx.Provider>
+  );
+}
+

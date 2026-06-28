@@ -20,6 +20,7 @@ import cda from  "../assets/codementorai.png";
 import imgtrex from '../assets/Imgtrex.png';
 import imgtrexDemo from '../assets/ImgtrexDemo.mp4';
 import dempic8 from '../assets/demo8.png';
+import excali from '../assets/excali.png';
 
 /* ────────────────────────────────────────────────
    Styles — inherit CSS vars from PortfolioLanding
@@ -218,15 +219,6 @@ const Projects = () => {
   
   // Data arrays 
   const frontendProjects = [
-    {
-      id: "fe-0",
-      title: "Excali Clone",
-      description: "A collaborative, browser-based drawing application inspired by Excalidraw, enabling real-time diagramming and sketching.",
-      technologies: ["Node.js", "Express", "React", "Canvas API"],
-      image: img, // Fallback image since none was provided
-      github: "https://github.com/Tejascodez/canvas-draw-app.git",
-      demo: "https://canvas-draw-app-zeta.vercel.app/"
-    },
     {
       id: "fe-1",
       title: "CodeMentor AI",
