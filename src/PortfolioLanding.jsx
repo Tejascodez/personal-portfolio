@@ -6,6 +6,7 @@ import { SiNextdotjs, SiExpress, SiMongodb, SiTypescript, SiTailwindcss, SiPostm
 
 import profileImg  from "./assets/pic3.png";
 import cdaImg      from "./assets/codementorai.png";
+import cafe from './assets/cafe.png'
 import imgtrexImg  from "./assets/Imgtrex.png";
 import portfolioImg from "./assets/portfolio.png";
 import excaliImg from "./assets/excali.png";
@@ -46,10 +47,13 @@ const useTheme = () => useContext(ThemeCtx);
 const projectsData = [
   { id:5, title:"AI MCQ Generator",      desc:"Generates MCQs from video inputs using LLMs and speech-to-text.",         thumb:dempic8Img,   tags:["TypeScript","LLama","Whisper API"], github:"https://github.com/Tejascodez/video-mcq-ai.git" },
   { id:1, title:"CodeMentor AI",        desc:"AI-powered coding platform with real-time feedback and code execution.", thumb:cdaImg,       tags:["Node.js","MongoDB","Gemini API"], github:"https://github.com/Dcode36/code_mentor_ai", demo:"https://code-mentor-ai.vercel.app/" },
+  { id:8, title:"AI Chat-BOT",          desc:"An AI-powered chatbot that delivers intelligent, real-time conversations using natural language processing.",         thumb:"",   tags:["TypeScript","LLama","Whisper API"], github:"https://github.com/Tejascodez/AI-ChatBOT.git" },
   { id:2, title:"Imgtrex AI Generator", desc:"Text-to-image generator using open-source HuggingFace models.",          thumb:imgtrexImg,   tags:["Node.js","Express","HuggingFace"], github:"https://github.com/Tejascodez/Imgtrex.git" },
   { id:3, title:"Excali Clone",          desc:"Collaborative browser-based drawing app with real-time diagramming.",     thumb:excaliImg, tags:["React","Node.js","Canvas API"], github:"https://github.com/Tejascodez/canvas-draw-app.git", demo:"https://canvas-draw-app-zeta.vercel.app/" },
   { id:4, title:"King Logistics",        desc:"Custom logistics website with booking and tracking system. Freelance.",   thumb:freelanceImg, tags:["React","CSS","Node.js"], demo:"https://heroic-longma-efd468.netlify.app/" },
   { id:6, title:"TBlog Spot",            desc:"RESTful blog platform with authentication, post management, comments.",   thumb:demopic1Img,  tags:["Node.js","Express","MongoDB"], github:"https://github.com/Tejascodez/tblog-spot.git" },
+  { id:7, title:"TVV Cafe",               desc:"A modern self-service café ordering kiosk inspired by McDonald's digital ordering experience.",   thumb:cafe,  tags:["Node.js","Express","MongoDB"], github:"https://github.com/Tejascodez/TVV-Cafe.git" },
+  
 ];
 
 const experienceData = [
@@ -70,11 +74,6 @@ const toolsData = [
   { name:"Postman",        icon:<SiPostman />,    color:"#FF6C37" },
 ];
 
-const thoughtsData = [
-  { title:"Building Scalable MERN Applications", excerpt:"Architecture decisions to deployment — lessons from production apps.", date:"Jan 2025", readTime:"5 min" },
-  { title:"Why I Chose the MERN Stack",          excerpt:"How JS full-stack simplifies collaboration and dev cycles.",           date:"Oct 2024", readTime:"4 min" },
-  { title:"CodeMentor AI — Architecture Dive",   excerpt:"Integrating Gemini API with Node.js for real-time AI feedback.",       date:"Nov 2024", readTime:"6 min" },
-];
 
 /* ══════════════════════════════════════════════
    GLOBAL STYLES
@@ -148,7 +147,6 @@ const FloatingNav = () => {
     { id:"projects", Icon:Briefcase,label:"Projects" },
     { id:"about",    Icon:User,     label:"About" },
     { id:"tools",    Icon:Code,     label:"Tools" },
-    { id:"contact",  Icon:Mail,     label:"Contact" },
   ];
   return (
     <div style={{ position:"fixed",top:18,left:0,right:0,display:"flex",justifyContent:"center",zIndex:9998,pointerEvents:"none" }}>
@@ -184,7 +182,7 @@ const FloatingNav = () => {
    LEFT SIDEBAR
 ══════════════════════════════════════════════ */
 const ProfileSidebar = () => {
-  const { isDark, t, setActiveTab } = useTheme();
+  const { isDark, t } = useTheme();
   const socials = [
     { Icon:Github,   href:"https://github.com/Tejascodez",         label:"GitHub" },
     { Icon:Twitter,  href:"https://twitter.com/tejastp834",        label:"Twitter" },
@@ -194,8 +192,8 @@ const ProfileSidebar = () => {
     { Icon:SiLeetcode,      name:"LeetCode",      url:"https://leetcode.com/u/tejastp834/",               color:"#FFA116" },
     { Icon:SiGeeksforgeeks, name:"GeeksforGeeks", url:"https://www.geeksforgeeks.org/profile/tejast6ngg", color:"#2F8D46" },
   ];
-  const interests = ["💪 Fitness","🎌 Anime","📚 Learning","💻 Coding"];
-  const stats = [{ num:"10+",label:"Projects" },{ num:"1+",label:"Yrs Exp" },{ num:"∞",label:"Curiosity" }];
+  const interests = ["💻 Coding","💪 Fitness","🎌 Anime","📚 Learning"];
+  const stats = [{ num:"10+",label:"Projects" },{ num:"1+",label:"Years Of Experience" },{ num:"∞",label:"Curiosity" }];
 
   return (
     <div style={{ height:"100%",overflow:"hidden",display:"flex",flexDirection:"column",padding:"16px 14px",gap:0 }}>
@@ -247,11 +245,6 @@ const ProfileSidebar = () => {
             style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:4,padding:"7px 6px",borderRadius:100,background:"#F15A24",color:"#fff",fontSize:11,fontWeight:700,textDecoration:"none",transition:"opacity .2s" }}
             onMouseEnter={e=>e.currentTarget.style.opacity=".82"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}
           >Resume <ArrowUpRight size={11}/></a>
-          <button onClick={()=>setActiveTab("contact")}
-            style={{ flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:4,padding:"7px 6px",borderRadius:100,background:t.card,border:`1px solid ${t.border}`,color:t.text,fontSize:11,fontWeight:600,transition:"all .18s",fontFamily:"'Outfit',sans-serif" }}
-            onMouseEnter={e=>{ e.currentTarget.style.borderColor="#F15A24"; e.currentTarget.style.background="rgba(241,90,36,0.08)"; }}
-            onMouseLeave={e=>{ e.currentTarget.style.borderColor=t.border; e.currentTarget.style.background=t.card; }}
-          >Contact</button>
         </div>
 
         <div style={{ height:1,background:t.border,margin:"0 0 10px",flexShrink:0 }}/>
@@ -265,7 +258,7 @@ const ProfileSidebar = () => {
         </div>
 
         {/* Coding profiles */}
-        <div style={{ flexShrink:0 }}>
+        <div style={{ flexShrink:0,marginBottom:10 }}>
           <div style={{ fontSize:8,color:t.muted,textTransform:"uppercase",letterSpacing:".15em",fontWeight:700,marginBottom:6 }}>Coding Profiles</div>
           {profiles.map(({ Icon, name, url, color },i)=>(
             <a key={i} href={url} target="_blank" rel="noopener noreferrer"
@@ -275,6 +268,21 @@ const ProfileSidebar = () => {
             >
               <Icon size={12} style={{ color,flexShrink:0 }}/>{name}<ArrowUpRight size={9} style={{ marginLeft:"auto" }}/>
             </a>
+          ))}
+        </div>
+
+        {/* Currently */}
+        <div style={{ flexShrink:0 }}>
+          <div style={{ fontSize:8,color:t.muted,textTransform:"uppercase",letterSpacing:".15em",fontWeight:700,marginBottom:6 }}>Currently</div>
+          {[
+            { emoji:"📍", text:"Kolhapur, India" },
+            { emoji:"💼", text:"Programmer Analyst @Cognizant" },
+            { emoji:"📚", text:"Grinding Problem Solving" },
+          ].map(({ emoji, text },i)=>(
+            <div key={i} style={{ display:"flex",alignItems:"center",gap:8,padding:"6px 8px",marginBottom:3,borderRadius:8,border:`1px solid ${t.border}`,color:t.muted,fontSize:10,fontWeight:500,background:t.card }}>
+              <span style={{ fontSize:11,flexShrink:0 }}>{emoji}</span>
+              <span style={{ overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{text}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -357,19 +365,8 @@ const HomeTab = () => {
 
       {/* Dev thoughts */}
       <EyeBrow text="Latest Writing" color={t.muted}/>
-      <div>
-        {thoughtsData.map((post,i)=>(
-          <motion.div key={i} initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} transition={{ delay:.08+i*.07 }}
-            style={{ display:"flex",justifyContent:"space-between",alignItems:"center",gap:16,padding:"13px 10px",borderBottom:`1px solid ${t.border}`,borderRadius:8,transition:"background .18s" }}
-            onMouseEnter={e=>e.currentTarget.style.background=t.hoverRow} onMouseLeave={e=>e.currentTarget.style.background="transparent"}
-          >
-            <div style={{ flex:1,minWidth:0 }}>
-              <div style={{ fontWeight:600,fontSize:13,color:t.text,marginBottom:3 }}>{post.title}</div>
-              <div style={{ fontSize:11,color:t.muted }}>{post.date} · {post.readTime}</div>
-            </div>
-            <ArrowLink href="#"/>
-          </motion.div>
-        ))}
+      <div style={{ padding:"18px 14px",border:`1px solid ${t.border}`,borderRadius:12,background:t.card }}>
+        <div style={{ fontSize:13,color:t.muted,fontStyle:"italic" }}>Uploading soon</div>
       </div>
     </TabWrap>
   );
@@ -470,63 +467,6 @@ const ToolsTab = () => {
   );
 };
 
-/* ══════════════════════════════════════════════
-   CONTACT TAB
-══════════════════════════════════════════════ */
-const ContactTab = () => {
-  const { t } = useTheme();
-  const [form, setForm] = useState({ name:"",email:"",subject:"",message:"" });
-  const inp = { width:"100%",padding:"12px 14px",background:t.input,border:`1px solid ${t.inputBorder}`,borderRadius:10,color:t.text,fontSize:12,outline:"none",fontFamily:"'Outfit',sans-serif",transition:"border-color .18s" };
-  const onFocus = e=>e.target.style.borderColor="rgba(241,90,36,0.5)";
-  const onBlur  = e=>e.target.style.borderColor=t.inputBorder;
-  return (
-    <TabWrap>
-      <EyeBrow text="Get In Touch"/>
-      <SplitHeading line1="Let's Work" line2="Together"/>
-      <div style={{ background:t.formBg,border:`1px solid ${t.formBorder}`,borderRadius:18,padding:"28px" }}>
-        <div className="contact-2col" style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12 }}>
-          {[["name","Name","Your name","text"],["email","Email","your@email.com","email"]].map(([f,label,ph,type])=>(
-            <div key={f}>
-              <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>{label}</label>
-              <input type={type} placeholder={ph} style={inp} value={form[f]} onChange={e=>setForm(p=>({...p,[f]:e.target.value}))} onFocus={onFocus} onBlur={onBlur}/>
-            </div>
-          ))}
-        </div>
-        <div style={{ marginBottom:12 }}>
-          <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>Project Type</label>
-          <select style={{ ...inp,color:form.subject?t.text:t.muted }} value={form.subject} onChange={e=>setForm(p=>({...p,subject:e.target.value}))} onFocus={onFocus} onBlur={onBlur}>
-            <option value="" style={{ background:"#141414" }}>Select a type</option>
-            <option value="web" style={{ background:"#141414" }}>Web Development</option>
-            <option value="fullstack" style={{ background:"#141414" }}>Full Stack Application</option>
-            <option value="freelance" style={{ background:"#141414" }}>Freelance Project</option>
-            <option value="other" style={{ background:"#141414" }}>Other</option>
-          </select>
-        </div>
-        <div style={{ marginBottom:18 }}>
-          <label style={{ display:"block",fontSize:9,color:t.muted,textTransform:"uppercase",letterSpacing:".12em",marginBottom:6,fontWeight:700 }}>Message</label>
-          <textarea placeholder="Tell me about your project..." rows={4} style={{ ...inp,resize:"vertical" }} value={form.message} onChange={e=>setForm(p=>({...p,message:e.target.value}))} onFocus={onFocus} onBlur={onBlur}/>
-        </div>
-        <motion.button type="button" whileHover={{ opacity:.85 }} whileTap={{ scale:.97 }}
-          style={{ width:"100%",padding:"13px",background:"#F15A24",color:"#fff",border:"none",borderRadius:12,fontSize:13,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:7,fontFamily:"'Outfit',sans-serif",boxShadow:"0 6px 18px rgba(241,90,36,0.28)" }}
-        >Send Message <ArrowUpRight size={15}/></motion.button>
-      </div>
-
-      {/* Quick links */}
-      <div style={{ display:"flex",gap:10,marginTop:18,flexWrap:"wrap" }}>
-        {[
-          { label:"Email me",  href:"mailto:tejastp834@gmail.com",              color:"#F15A24" },
-          { label:"LinkedIn",  href:"https://www.linkedin.com/in/tejasp834",    color:"#0077B5" },
-          { label:"GitHub",    href:"https://github.com/Tejascodez",            color:"#CCFF00" },
-        ].map((l,i)=>(
-          <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
-            style={{ display:"inline-flex",alignItems:"center",gap:5,padding:"7px 14px",borderRadius:100,border:`1px solid ${l.color}44`,color:l.color,fontSize:11,fontWeight:600,textDecoration:"none",background:`${l.color}0d`,transition:"background .18s" }}
-            onMouseEnter={e=>e.currentTarget.style.background=`${l.color}1f`} onMouseLeave={e=>e.currentTarget.style.background=`${l.color}0d`}
-          >{l.label} <ArrowUpRight size={10}/></a>
-        ))}
-      </div>
-    </TabWrap>
-  );
-};
 
 /* ══════════════════════════════════════════════
    FLOATING CORNER BUTTONS
@@ -579,7 +519,6 @@ const TABS = {
   projects: <ProjectsTab/>,
   about:    <AboutTab/>,
   tools:    <ToolsTab/>,
-  contact:  <ContactTab/>,
 };
 
 export default function PortfolioLanding() {
