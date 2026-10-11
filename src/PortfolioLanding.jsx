@@ -33,6 +33,7 @@ export default function PortfolioLanding() {
         }}
       >
         <div
+          className="portfolio-shell"
           style={{
             maxWidth: 1380,
             margin: "0 auto",
@@ -73,6 +74,8 @@ export default function PortfolioLanding() {
 
             .portfolio-profile {
               position: static !important;
+              width: min(100%, 480px);
+              margin: 0 auto;
             }
           }
 
@@ -92,15 +95,37 @@ export default function PortfolioLanding() {
             }
           }
 
-          @media (max-width: 680px) {
-            #home > div > div:last-child {
+          @media (max-width: 760px) {
+            .hero-feature-grid {
               grid-template-columns: 1fr !important;
             }
           }
 
-          @media (max-width: 540px) {
-            body {
-              overflow-x: hidden;
+          @media (max-width: 600px) {
+            .portfolio-shell {
+              padding: 12px 14px 28px !important;
+            }
+            .portfolio-layout {
+              gap: 24px !important;
+            }
+            .hero-title {
+              font-size: clamp(2.7rem, 12vw, 4.2rem) !important;
+              overflow-wrap: anywhere;
+            }
+            .hero-intro {
+              font-size: 16px !important;
+            }
+            .hero-feature-grid > div {
+              padding: 20px !important;
+            }
+            #about > div {
+              padding: 20px !important;
+            }
+            #about > div:nth-child(2) > div {
+              padding: 20px !important;
+            }
+            #projects article > div:last-child {
+              padding: 18px !important;
             }
           }
         `}

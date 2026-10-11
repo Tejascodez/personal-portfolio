@@ -18,6 +18,7 @@ export default function HeroPanel() {
       >
         <div>
           <h1
+            className="hero-title"
             style={{
               margin: 0,
               fontSize: "clamp(3.8rem, 10vw, 7.8rem)",
@@ -29,6 +30,7 @@ export default function HeroPanel() {
             Software
           </h1>
           <div
+            className="hero-title"
             style={{
               fontSize: "clamp(3.8rem, 10vw, 7.8rem)",
               lineHeight: 0.88,
@@ -43,6 +45,7 @@ export default function HeroPanel() {
         </div>
 
         <p
+          className="hero-intro"
           style={{
             margin: 0,
             maxWidth: 700,
@@ -90,6 +93,7 @@ export default function HeroPanel() {
         </div>
 
         <div
+          className="hero-feature-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1.2fr 1fr",
